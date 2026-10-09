@@ -1,0 +1,513 @@
+<!-- ==========================================================================
+     JobSafe AI - Interactive 5-Stage Pipeline Studio Modal
+     Stages:
+     1. Enter Job Details
+     2. Text Preprocessing
+     3. AI/ML Analysis
+     4. Red-Flag Detection
+     5. Risk Prediction
+     ========================================================================== -->
+
+<div class="modal fade" id="pipelineStudioModal" tabindex="-1" aria-labelledby="pipelineStudioModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px; overflow: hidden; background: #ffffff;">
+            
+            <!-- Modal Header -->
+            <div class="modal-header py-3 px-4 text-white" style="background: linear-gradient(135deg, #6c2bd9 0%, #4c1d95 100%);">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.18); font-size: 1.15rem;">
+                        <i class="fa-solid fa-network-wired"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title fw-bold text-white mb-0" id="pipelineStudioModalLabel">
+                            JobSafe AI &bull; Interactive Pipeline Studio
+                        </h5>
+                        <small class="text-white-50 fs-8">
+                            5-Stage Neural &amp; Heuristic Verification Workbench
+                        </small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <!-- Stepper Tab Navigation Bar -->
+            <div class="px-4 pt-3 pb-2 border-bottom" style="background: #faf5ff;">
+                <div class="nav nav-pills nav-fill gap-1 p-1 rounded-3 border" id="pipelineStepperTabs" style="background: #ffffff;">
+                    <button class="nav-link pipeline-nav-tab py-2 px-2.5 fs-8 fw-bold active" id="pipe-tab-1" type="button" onclick="switchPipelineStep(1)">
+                        <span class="step-num-pill me-1">1</span>
+                        <span>Job Details</span>
+                    </button>
+                    <button class="nav-link pipeline-nav-tab py-2 px-2.5 fs-8 fw-bold" id="pipe-tab-2" type="button" onclick="switchPipelineStep(2)">
+                        <span class="step-num-pill me-1">2</span>
+                        <span>Preprocessing</span>
+                    </button>
+                    <button class="nav-link pipeline-nav-tab py-2 px-2.5 fs-8 fw-bold" id="pipe-tab-3" type="button" onclick="switchPipelineStep(3)">
+                        <span class="step-num-pill me-1">3</span>
+                        <span>AI/ML Analysis</span>
+                    </button>
+                    <button class="nav-link pipeline-nav-tab py-2 px-2.5 fs-8 fw-bold" id="pipe-tab-4" type="button" onclick="switchPipelineStep(4)">
+                        <span class="step-num-pill me-1">4</span>
+                        <span>Red Flags</span>
+                    </button>
+                    <button class="nav-link pipeline-nav-tab py-2 px-2.5 fs-8 fw-bold" id="pipe-tab-5" type="button" onclick="switchPipelineStep(5)">
+                        <span class="step-num-pill me-1">5</span>
+                        <span>Risk Prediction</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Modal Body (Panes for each of the 5 stages) -->
+            <div class="modal-body p-4 position-relative" style="min-height: 480px; max-height: calc(85vh - 160px); overflow-y: auto;">
+                
+                <!-- Loading Overlay within modal -->
+                <div id="pipelineLoadingOverlay" class="d-none position-absolute top-0 start-0 w-100 h-100 d-flex flex-column align-items-center justify-content-center" style="background: rgba(255, 255, 255, 0.88); z-index: 20; backdrop-filter: blur(3px);">
+                    <div class="spinner-border text-purple mb-2" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="visually-hidden">Analyzing...</span>
+                    </div>
+                    <span class="fw-bold text-dark fs-7" id="pipelineLoadingText">Processing job through AI pipeline...</span>
+                    <small class="text-muted fs-8">Tokenizing text &bull; Calculating ML probability &bull; Checking red flags</small>
+                </div>
+
+                <!-- ==========================================================
+                     STAGE 1: ENTER JOB DETAILS FORM
+                     ========================================================== -->
+                <div class="pipeline-pane active" id="pipeline-pane-1">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <span class="badge py-1 px-2 mb-1" style="background: var(--bg-lavender); color: var(--purple-primary); font-size: 0.72rem;">STAGE 01</span>
+                            <h5 class="fw-bold text-dark mb-0">Enter Job Details</h5>
+                            <small class="text-muted">Provide structured listing metadata or paste raw job details to begin analysis</small>
+                        </div>
+                        <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                            <span class="text-muted small fw-semibold me-1">Quick Presets:</span>
+                            <button type="button" class="preset-pill preset-pill-safe py-1 px-2.5 fs-8" onclick="loadPipelinePreset('real_tech')">
+                                <i class="fa-solid fa-circle-check"></i> Real Tech
+                            </button>
+                            <button type="button" class="preset-pill preset-pill-fake py-1 px-2.5 fs-8" onclick="loadPipelinePreset('scam_telegram')">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Telegram Scam
+                            </button>
+                            <button type="button" class="preset-pill preset-pill-fake py-1 px-2.5 fs-8" onclick="loadPipelinePreset('scam_check')">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Cashier Check
+                            </button>
+                        </div>
+                    </div>
+
+                    <form id="pipelineJobDetailsForm" onsubmit="event.preventDefault(); runPipelineFromStep1();">
+                        <div class="row g-3">
+                            <!-- Job Title & Company Name -->
+                            <div class="col-md-6">
+                                <label class="form-label saas-label fs-8" for="pipe_title">
+                                    <i class="fa-solid fa-briefcase text-purple"></i> Job Title
+                                </label>
+                                <input type="text" class="form-control saas-input" id="pipe_title" placeholder="e.g. Senior Backend Engineer" value="Senior Cloud Infrastructure Engineer">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label saas-label fs-8" for="pipe_company">
+                                    <i class="fa-solid fa-building text-purple"></i> Company Name
+                                </label>
+                                <input type="text" class="form-control saas-input" id="pipe_company" placeholder="e.g. Acme Corporation" value="Apex Cloud Technologies">
+                            </div>
+
+                            <!-- Job Description (Main) -->
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <label class="form-label saas-label fs-8 mb-0" for="pipe_description">
+                                        <i class="fa-solid fa-align-left text-purple"></i> Job Description <span class="text-danger">*</span>
+                                    </label>
+                                    <small class="text-muted font-monospace fs-8" id="pipe_desc_counter">0 chars</small>
+                                </div>
+                                <textarea class="form-control saas-input" id="pipe_description" rows="5" placeholder="Paste the job description or recruitment message here..." required oninput="updatePipeDescCounter()">We are seeking an experienced Senior Cloud Engineer. In this role, you will design, architect, and deploy reliable AWS/Kubernetes systems. You will collaborate with cross-functional product squads, participate in code reviews, and drive architectural standards.</textarea>
+                            </div>
+
+                            <!-- Requirements & Qualifications -->
+                            <div class="col-md-6">
+                                <label class="form-label saas-label fs-8" for="pipe_requirements">
+                                    <i class="fa-solid fa-list-check text-purple"></i> Requirements &amp; Qualifications
+                                </label>
+                                <textarea class="form-control saas-input" id="pipe_requirements" rows="2" placeholder="e.g. BS in Computer Science, 3+ years experience...">BS/MS in Computer Science. 5+ years with Linux, Docker, Terraform, and Python. Solid understanding of CI/CD pipelines.</textarea>
+                            </div>
+
+                            <!-- Benefits & Compensation -->
+                            <div class="col-md-6">
+                                <label class="form-label saas-label fs-8" for="pipe_benefits">
+                                    <i class="fa-solid fa-gift text-purple"></i> Benefits &amp; Compensation
+                                </label>
+                                <textarea class="form-control saas-input" id="pipe_benefits" rows="2" placeholder="e.g. $120k - $150k, 401(k), health insurance...">Competitive salary ($130,000 - $160,000), 401(k) matching, health and dental insurance, 20 days PTO.</textarea>
+                            </div>
+
+                            <!-- Recruiter Email & Workplace Mode -->
+                            <div class="col-md-6">
+                                <label class="form-label saas-label fs-8" for="pipe_email">
+                                    <i class="fa-solid fa-envelope text-purple"></i> Recruiter Contact Email
+                                </label>
+                                <input type="email" class="form-control saas-input" id="pipe_email" placeholder="e.g. hr@company.com" value="careers@apexcloudtechnologies.com">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label saas-label fs-8" for="pipe_telecommuting">
+                                    <i class="fa-solid fa-laptop-house text-purple"></i> Workplace Mode
+                                </label>
+                                <select class="form-select saas-input" id="pipe_telecommuting">
+                                    <option value="1">Remote / Work From Home</option>
+                                    <option value="0" selected>On-site / Hybrid Corporate Office</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Action Toolbar -->
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5 mt-4 pt-3 border-top">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-saas-primary px-4 py-2.5 fw-bold fs-7">
+                                    <i class="fa-solid fa-play me-1.5"></i> Run Preprocessing &rarr;
+                                </button>
+                                <button type="button" class="btn btn-saas-secondary px-3 py-2.5 fs-8" onclick="executeFullPipelineAnalysis()">
+                                    <i class="fa-solid fa-bolt me-1 text-warning"></i> Run End-to-End Audit
+                                </button>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <a href="/analyzer?mode=detailed" class="btn btn-link text-purple fs-8 text-decoration-none fw-bold">
+                                    <i class="fa-solid fa-up-right-from-square me-1"></i> Open Full Page Form
+                                </a>
+                                <button type="button" class="btn btn-outline-secondary btn-sm px-2.5" onclick="clearPipelineFields()">
+                                    <i class="fa-solid fa-rotate-left"></i> Clear
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- ==========================================================
+                     STAGE 2: TEXT PREPROCESSING BREAKDOWN
+                     ========================================================== -->
+                <div class="pipeline-pane d-none" id="pipeline-pane-2">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <span class="badge py-1 px-2 mb-1" style="background: var(--bg-lavender); color: var(--purple-primary); font-size: 0.72rem;">STAGE 02</span>
+                            <h5 class="fw-bold text-dark mb-0">Text Preprocessing &amp; Token Sanitization</h5>
+                            <small class="text-muted">How JobSafe AI sanitizes, normalizes, and extracts semantic tokens from job text</small>
+                        </div>
+                        <button type="button" class="btn btn-saas-secondary btn-sm" onclick="switchPipelineStep(1)">
+                            <i class="fa-solid fa-pen-to-square me-1"></i> Edit Input Text
+                        </button>
+                    </div>
+
+                    <!-- Preprocessing Metric Cards Row -->
+                    <div class="row g-2.5 mb-3">
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="p-2.5 rounded-3 border bg-white text-center">
+                                <small class="text-muted fs-8 d-block mb-1">Original Chars</small>
+                                <span class="fw-bold font-monospace text-dark fs-6" id="prep_stat_raw_chars">0</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="p-2.5 rounded-3 border bg-white text-center">
+                                <small class="text-muted fs-8 d-block mb-1">Cleaned Chars</small>
+                                <span class="fw-bold font-monospace text-purple fs-6" id="prep_stat_cleaned_chars">0</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="p-2.5 rounded-3 border bg-white text-center">
+                                <small class="text-muted fs-8 d-block mb-1">Noise Stripped</small>
+                                <span class="fw-bold font-monospace text-danger fs-6" id="prep_stat_noise">0</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="p-2.5 rounded-3 border bg-white text-center">
+                                <small class="text-muted fs-8 d-block mb-1">Token Count</small>
+                                <span class="fw-bold font-monospace text-success fs-6" id="prep_stat_words">0</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="p-2.5 rounded-3 border bg-white text-center">
+                                <small class="text-muted fs-8 d-block mb-1">URLs Removed</small>
+                                <span class="fw-bold font-monospace text-warning fs-6" id="prep_stat_urls">0</span>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="p-2.5 rounded-3 border bg-white text-center">
+                                <small class="text-muted fs-8 d-block mb-1">Emails Isolated</small>
+                                <span class="fw-bold font-monospace text-info fs-6" id="prep_stat_emails">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Windows: Before vs After -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 border h-100" style="background: #fafafa;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-dark fs-8 d-flex align-items-center gap-1.5">
+                                        <i class="fa-solid fa-file-lines text-secondary"></i> Raw Input Text (Original)
+                                    </span>
+                                    <span class="badge bg-secondary font-monospace fs-8">Before Cleaning</span>
+                                </div>
+                                <div class="font-monospace fs-8 text-secondary p-2.5 rounded bg-white border" id="prep_window_raw" style="max-height: 180px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">
+                                    (No text entered)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 border h-100" style="background: #faf5ff; border-color: rgba(108, 43, 217, 0.25) !important;">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="fw-bold text-purple fs-8 d-flex align-items-center gap-1.5">
+                                        <i class="fa-solid fa-wand-magic-sparkles text-purple"></i> Preprocessed &amp; Normalized Text
+                                    </span>
+                                    <span class="badge font-monospace fs-8" style="background: #ede9fe; color: #5b21b6;">Ready for TF-IDF Vectorizer</span>
+                                </div>
+                                <div class="font-monospace fs-8 text-dark p-2.5 rounded bg-white border" id="prep_window_clean" style="max-height: 180px; overflow-y: auto; white-space: pre-wrap; word-break: break-word;">
+                                    (Processing...)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5 Cleaning Pipeline Stages List -->
+                    <div class="saas-card p-3 mb-3" style="background: #ffffff;">
+                        <h6 class="fw-bold text-dark fs-8 mb-2.5 text-uppercase tracking-wider">
+                            <i class="fa-solid fa-list-ol text-purple me-1"></i> NLP Cleaning Sequence Executed:
+                        </h6>
+                        <div class="d-flex flex-column gap-2" id="prep_stages_container">
+                            <!-- Populated dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Stage 2 Navigation -->
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <button type="button" class="btn btn-saas-secondary px-3" onclick="switchPipelineStep(1)">
+                            &larr; Back to Job Details
+                        </button>
+                        <button type="button" class="btn btn-saas-primary px-4 fw-bold" onclick="switchPipelineStep(3)">
+                            Next: Step 3 (AI/ML Analysis) &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     STAGE 3: AI / ML ANALYSIS
+                     ========================================================== -->
+                <div class="pipeline-pane d-none" id="pipeline-pane-3">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <span class="badge py-1 px-2 mb-1" style="background: var(--bg-lavender); color: var(--purple-primary); font-size: 0.72rem;">STAGE 03</span>
+                            <h5 class="fw-bold text-dark mb-0">AI / Machine Learning Analysis</h5>
+                            <small class="text-muted">High-dimensional TF-IDF unigram &amp; bigram classification with Random Forest</small>
+                        </div>
+                        <span class="badge py-1.5 px-3 rounded-pill font-monospace" id="ml_status_badge" style="background: var(--bg-lavender); color: var(--purple-primary);">
+                            <i class="fa-solid fa-circle-check me-1 text-success"></i> Model Active
+                        </span>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <!-- Model Architecture Specs -->
+                        <div class="col-lg-5">
+                            <div class="p-3.5 rounded-3 border bg-white h-100">
+                                <h6 class="fw-bold text-dark fs-8 text-uppercase tracking-wider mb-3">
+                                    <i class="fa-solid fa-microchip text-purple me-1"></i> Classifier Configuration
+                                </h6>
+                                <ul class="list-unstyled d-flex flex-column gap-2.5 small mb-0">
+                                    <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                        <span class="text-muted">Champion Algorithm:</span>
+                                        <span class="fw-bold text-dark font-monospace" id="ml_model_name">Random Forest Classifier</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                        <span class="text-muted">Feature Extractor:</span>
+                                        <span class="fw-bold text-dark font-monospace">TF-IDF (1-2 N-Grams)</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                        <span class="text-muted">Benchmark Accuracy:</span>
+                                        <span class="badge font-monospace" style="background: var(--safe-green-bg); color: var(--safe-green);">100.0%</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between align-items-center border-bottom pb-2">
+                                        <span class="text-muted">Classification Threshold:</span>
+                                        <span class="fw-bold font-monospace text-dark">50.0% Probability</span>
+                                    </li>
+                                    <li class="d-flex justify-content-between align-items-center">
+                                        <span class="text-muted">Training Dataset:</span>
+                                        <span class="fw-bold font-monospace text-dark">4,000 Verified Postings</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Live Inference Output -->
+                        <div class="col-lg-7">
+                            <div class="p-3.5 rounded-3 border h-100" style="background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);">
+                                <h6 class="fw-bold text-dark fs-8 text-uppercase tracking-wider mb-2">
+                                    <i class="fa-solid fa-chart-line text-purple me-1"></i> Inference Output
+                                </h6>
+                                
+                                <div class="my-3">
+                                    <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                        <span class="text-secondary small fw-semibold">ML Scam Probability:</span>
+                                        <span class="fw-bold font-monospace fs-5 text-purple" id="ml_prob_text">0.0%</span>
+                                    </div>
+                                    <div class="progress" style="height: 10px; background: #ede9fe; border-radius: 6px;">
+                                        <div class="progress-bar bg-purple" id="ml_prob_bar" role="progressbar" style="width: 0%; transition: width 0.6s ease;"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-muted mt-1 fs-8">
+                                        <span>0% (Legitimate)</span>
+                                        <span>50% (Threshold)</span>
+                                        <span>100% (Deceptive)</span>
+                                    </div>
+                                </div>
+
+                                <div class="p-2.5 rounded-3 bg-white border small mt-3" id="ml_interpretation_box">
+                                    <div class="fw-bold text-dark fs-8 mb-1" id="ml_verdict_summary">Model Evaluation: Calculating...</div>
+                                    <p class="text-muted small mb-0 lh-sm" id="ml_verdict_detail">
+                                        TF-IDF extracted term frequencies are classified against high-dimensional decision boundaries.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Indicative Features Matched in Text -->
+                    <div class="p-3 rounded-3 border bg-white mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold text-dark fs-8 text-uppercase tracking-wider mb-0">
+                                <i class="fa-solid fa-tags text-purple me-1"></i> Significant Model Vocabulary Detected in Job Text:
+                            </h6>
+                            <small class="text-muted fs-8 font-monospace">Top TF-IDF Signals</small>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2" id="ml_matched_tokens_container">
+                            <span class="text-muted small fst-italic">No predatory keywords detected in this text.</span>
+                        </div>
+                    </div>
+
+                    <!-- Stage 3 Navigation -->
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <button type="button" class="btn btn-saas-secondary px-3" onclick="switchPipelineStep(2)">
+                            &larr; Back to Preprocessing
+                        </button>
+                        <button type="button" class="btn btn-saas-primary px-4 fw-bold" onclick="switchPipelineStep(4)">
+                            Next: Step 4 (Red Flags) &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     STAGE 4: RED-FLAG DETECTION
+                     ========================================================== -->
+                <div class="pipeline-pane d-none" id="pipeline-pane-4">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <span class="badge py-1 px-2 mb-1" style="background: var(--warning-orange-bg); color: #d97706; font-size: 0.72rem;">STAGE 04</span>
+                            <h5 class="fw-bold text-dark mb-0">Red-Flag Heuristic Detection</h5>
+                            <small class="text-muted">Deterministic rule engine scanning for registration fees, Telegram chats, checks, and identity harvesting</small>
+                        </div>
+                        <span class="badge py-1.5 px-3 rounded-pill font-monospace" id="flags_count_badge" style="background: var(--danger-red-bg); color: var(--danger-red);">
+                            0 Flags Triggered
+                        </span>
+                    </div>
+
+                    <!-- Red Flag Cards List -->
+                    <div class="mb-4" id="pipeline_red_flags_list">
+                        <!-- Populated dynamically -->
+                    </div>
+
+                    <!-- Semantic Highlighted Description -->
+                    <div class="p-3.5 rounded-3 border bg-white mb-3">
+                        <div class="d-flex justify-content-between align-items-center mb-2 pb-1 border-bottom">
+                            <h6 class="fw-bold text-dark fs-8 text-uppercase tracking-wider mb-0">
+                                <i class="fa-solid fa-highlighter text-purple me-1"></i> In-Line Semantic Highlights:
+                            </h6>
+                            <small class="text-muted fs-8">Suspicious spans wrapped in colored tags</small>
+                        </div>
+                        <div class="p-3 rounded-2 border fs-8 lh-base font-monospace" id="pipeline_highlighted_box" style="background: #fafafa; max-height: 180px; overflow-y: auto;">
+                            (No suspicious phrases highlighted)
+                        </div>
+                    </div>
+
+                    <!-- Stage 4 Navigation -->
+                    <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+                        <button type="button" class="btn btn-saas-secondary px-3" onclick="switchPipelineStep(3)">
+                            &larr; Back to AI/ML Analysis
+                        </button>
+                        <button type="button" class="btn btn-saas-primary px-4 fw-bold" onclick="switchPipelineStep(5)">
+                            Next: Step 5 (Risk Prediction) &rarr;
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ==========================================================
+                     STAGE 5: RISK PREDICTION & VERDICT
+                     ========================================================== -->
+                <div class="pipeline-pane d-none" id="pipeline-pane-5">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+                        <div>
+                            <span class="badge py-1 px-2 mb-1" style="background: var(--safe-green-bg); color: var(--safe-green); font-size: 0.72rem;">STAGE 05</span>
+                            <h5 class="fw-bold text-dark mb-0">Risk Prediction &amp; Final Verdict</h5>
+                            <small class="text-muted">Blended AI risk score and explainable candidate safety recommendation</small>
+                        </div>
+                        <button type="button" class="btn btn-saas-secondary btn-sm px-3" onclick="copyPipelineAuditSummary()">
+                            <i class="fa-regular fa-copy me-1"></i> Copy Audit Summary
+                        </button>
+                    </div>
+
+                    <!-- Verdict Card -->
+                    <div class="verdict-box p-4 mb-3" id="pipeline_verdict_card">
+                        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                            <div class="status-pill-lg" id="pipeline_verdict_pill">
+                                <i class="fa-solid fa-shield-halved" id="pipeline_verdict_icon"></i>
+                                <span id="pipeline_badge_label">CLASSIFICATION</span>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-muted d-block">ML Model Confidence</small>
+                                <span class="font-monospace fw-bold text-dark fs-6" id="pipeline_conf_label">0.0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Gauge & Headline -->
+                        <div class="d-flex align-items-center gap-4 my-2">
+                            <div class="saas-gauge-wrap">
+                                <svg class="saas-gauge-svg" viewBox="0 0 100 100" width="105" height="105">
+                                    <circle class="saas-gauge-bg" cx="50" cy="50" r="42" fill="none" stroke-width="8"/>
+                                    <circle class="saas-gauge-fill" id="pipeline_gauge_circle" cx="50" cy="50" r="42" fill="none" stroke-width="8"
+                                        stroke-dasharray="263.89"
+                                        stroke-dashoffset="263.89"
+                                        stroke-linecap="round"/>
+                                </svg>
+                                <div class="saas-gauge-text">
+                                    <span class="saas-gauge-number" id="pipeline_gauge_number">0%</span>
+                                    <span class="saas-gauge-sub">Risk Score</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <h4 class="fw-bold text-dark mb-1 tracking-tight" id="pipeline_verdict_heading">Analyzing...</h4>
+                                <p class="text-secondary small mb-0 lh-base" id="pipeline_recommendation_text">
+                                    Our hybrid engine evaluates machine learning confidence against red flag severity.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5-Point Safety Verification Checklist -->
+                    <div class="saas-card p-3.5 mb-3" style="background: #ffffff;">
+                        <h6 class="fw-bold text-dark fs-8 text-uppercase tracking-wider mb-2.5">
+                            <i class="fa-solid fa-clipboard-check text-purple me-1"></i> 5-Point Safety Verification:
+                        </h6>
+                        <div class="d-flex flex-column gap-2" id="pipeline_checklist_container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Final Action Toolbar -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 pt-3 border-top">
+                        <div class="d-flex gap-2">
+                            <button type="button" class="btn btn-saas-primary px-3.5 py-2 fw-bold fs-8" onclick="switchPipelineStep(1)">
+                                <i class="fa-solid fa-rotate-left me-1"></i> Test Another Job
+                            </button>
+                            <a href="/analyzer" class="btn btn-saas-secondary px-3.5 py-2 fs-8">
+                                <i class="fa-solid fa-magnifying-glass-chart me-1"></i> Go to Main Analyzer
+                            </a>
+                        </div>
+                        <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal">
+                            Close Studio
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

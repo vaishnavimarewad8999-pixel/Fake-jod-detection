@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}JobSafe AI - AI Fake Job Detection System{% endblock %}</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Custom Pure Purple SaaS Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Premium Clean Navbar -->
+    <nav class="navbar navbar-expand-xl saas-navbar sticky-top py-2.5">
+        <div class="container">
+            <!-- Left Branding -->
+            <a class="navbar-brand d-flex align-items-center gap-2.5 text-decoration-none" href="{{ url_for('dashboard') if session.get('user') else url_for('login') }}">
+                <span class="brand-icon-wrapper">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </span>
+                <div>
+                    <div class="d-flex align-items-center gap-1.5">
+                        <span class="brand-logo-text">JobSafe AI</span>
+                        <span class="version-badge">v2.0</span>
+                    </div>
+                    <span class="text-muted d-block" style="font-size: 0.72rem; line-height: 1; font-weight: 600;" data-i18n="brand_subtitle">
+                        AI Fake Job Detection System
+                    </span>
+                </div>
+            </a>
+            
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler border-0 p-2 text-purple" type="button" data-bs-toggle="collapse" data-bs-target="#navContent" aria-controls="navContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars fs-5"></i>
+            </button>
+
+            <!-- Nav Links & Profile -->
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav mx-auto mb-2 mb-xl-0 gap-1 align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link saas-nav-link px-3 {% if request.path == '/dashboard' or request.path == '/' %}active{% endif %}" href="{{ url_for('dashboard') }}">
+                            <i class="fa-solid fa-house me-1.5 opacity-75"></i> <span data-i18n="nav_home">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link saas-nav-link px-3 {% if request.path == '/analyzer' or request.path == '/scan' %}active{% endif %}" href="{{ url_for('analyzer') }}">
+                            <i class="fa-solid fa-magnifying-glass-chart me-1.5 opacity-75"></i> <span data-i18n="nav_detect">Fake Job Detection</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link saas-nav-link px-3 {% if request.path == '/offer-letter' %}active{% endif %}" href="{{ url_for('offer_letter') }}">
+                            <i class="fa-solid fa-file-shield me-1.5 opacity-75"></i> <span data-i18n="nav_offer_letter">Offer Letter Verification</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link saas-nav-link px-3 {% if request.path == '/history' %}active{% endif %}" href="{{ url_for('history') }}">
+                            <i class="fa-solid fa-clock-rotate-left me-1.5 opacity-75"></i> <span data-i18n="nav_history">History</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link saas-nav-link px-3 {% if request.path == '/analytics' %}active{% endif %}" href="{{ url_for('analytics') }}">
+                            <i class="fa-solid fa-chart-pie me-1.5 opacity-75"></i> <span data-i18n="nav_analytics">Analytics</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link saas-nav-link px-3 {% if request.path == '/about' %}active{% endif %}" href="{{ url_for('about') }}">
+                            <i class="fa-solid fa-circle-nodes me-1.5 opacity-75"></i> <span data-i18n="nav_about">About</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Right Toolbar: Language Selector & Auth State -->
+                <div class="d-flex align-items-center gap-2 mt-3 mt-xl-0">
+                    
+                    <!-- Language Selector Dropdown (English, Marathi, Hindi) -->
+                    <div class="dropdown" id="languageSelectorContainer">
+                        <button class="btn btn-sm btn-saas-secondary dropdown-toggle py-1.5 px-3 rounded-pill fs-8 fw-bold d-flex align-items-center gap-1.5" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="Select Language">
+                            <i class="fa-solid fa-globe text-purple"></i>
+                            <span id="currentLangLabel">English</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end saas-card-flat shadow-sm p-1 fs-8 border-0">
+                            <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="setAppLanguage('en')"><i class="fa-solid fa-check me-1 lang-check lang-check-en"></i> English</a></li>
+                            <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="setAppLanguage('mr')"><i class="fa-solid fa-check me-1 lang-check lang-check-mr d-none"></i> मराठी (Marathi)</a></li>
+                            <li><a class="dropdown-item rounded-2 py-1.5" href="javascript:void(0)" onclick="setAppLanguage('hi')"><i class="fa-solid fa-check me-1 lang-check lang-check-hi d-none"></i> हिन्दी (Hindi)</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- User Account / Login State -->
+                    {% if session.get('user') %}
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-saas-secondary dropdown-toggle d-flex align-items-center gap-2 py-1.5 px-3 rounded-pill" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 22px; height: 22px; background: var(--gradient-primary); font-size: 0.7rem; font-weight: 700;">
+                                {{ session.get('user', 'U')[0] | upper }}
+                            </div>
+                            <span class="fw-bold fs-8 text-dark">{{ session.get('user_name', session.get('user')) }}</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end saas-card-flat shadow-lg p-2 border-0" style="min-width: 200px;">
+                            <li class="px-3 py-1.5 border-bottom mb-1">
+                                <span class="text-muted fs-8 d-block" data-i18n="signed_in_as">Signed in as</span>
+                                <strong class="text-dark small text-truncate d-block">{{ session.get('user_email', session.get('user')) }}</strong>
+                            </li>
+                            <li>
+                                <a class="dropdown-item rounded-2 py-2 small d-flex align-items-center gap-2 text-danger" href="{{ url_for('logout') }}">
+                                    <i class="fa-solid fa-right-from-bracket"></i> <span data-i18n="nav_logout">Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-saas-primary btn-sm px-3 rounded-pill">
+                        <i class="fa-solid fa-right-to-bracket me-1"></i> <span data-i18n="nav_login">Login</span>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Global Flash Alerts Container -->
+    <div class="container mt-3">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show py-2.5 px-3 mb-3 small d-flex align-items-center gap-2 shadow-sm border-0" style="border-radius: 12px; background: {% if category == 'success' %}#ecfdf5{% elif category == 'danger' %}#fef2f2{% else %}#f5f3ff{% endif %};" role="alert">
+                    <i class="fa-solid {% if category == 'danger' %}fa-circle-xmark text-danger{% elif category == 'success' %}fa-circle-check text-success{% elif category == 'warning' %}fa-triangle-exclamation text-warning{% else %}fa-circle-info text-purple{% endif %} fs-6"></i>
+                    <span class="flex-grow-1 text-dark fw-medium">{{ message }}</span>
+                    <button type="button" class="btn-close p-2" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- AI Scanning Effect Modal Overlay -->
+    <div id="aiScanOverlay" class="scan-overlay">
+        <div class="scan-modal-card">
+            <div class="scan-line"></div>
+            <div class="scan-radar-wrapper">
+                <div class="scan-radar-pulse"></div>
+                <div class="scan-shield-center">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+            </div>
+            <h5 class="fw-bold text-dark mb-1" data-i18n="overlay_analyzing_title">JobSafe AI is analyzing this job...</h5>
+            <p class="text-muted small mb-3" data-i18n="overlay_analyzing_desc">
+                Checking scam heuristics &bull; Tokenizing semantics &bull; Running Random Forest ML classification
+            </p>
+            <div class="d-flex justify-content-center align-items-center gap-1 text-purple">
+                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.8s;"></span>
+                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 0.9s;"></span>
+                <span class="spinner-grow spinner-grow-sm" role="status" style="animation-duration: 1s;"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Body -->
+    <main class="main-container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FLOATING AI CHATBOT WIDGET (Bottom Right) -->
+    <div class="chatbot-float-btn p-1" id="chatbotToggleBtn" onclick="toggleChatbot()" title="JobSafe AI Assistant">
+        <img src="{{ url_for('static', filename='images/bot_avatar.svg') }}" alt="JobSafe AI Assistant Avatar" id="chatBtnAvatar" style="width: 44px; height: 44px; border-radius: 50%;">
+        <i class="fa-solid fa-xmark text-white fs-4 d-none" id="chatBtnIcon"></i>
+        <span class="chatbot-badge"></span>
+    </div>
+
+    <div class="chatbot-window" id="chatbotWindow">
+        <!-- Chatbot Header -->
+        <div class="chatbot-header">
+            <div class="d-flex align-items-center gap-2">
+                <img src="{{ url_for('static', filename='images/bot_avatar.svg') }}" alt="JobSafe AI Assistant" style="width: 34px; height: 34px; border-radius: 50%;" class="shadow-sm">
+                <div>
+                    <h6 class="mb-0 fw-bold fs-7 text-white" data-i18n="chat_header_title">JobSafe AI Assistant</h6>
+                    <small class="text-white-50 fs-8 d-flex align-items-center gap-1">
+                        <span class="rounded-circle bg-success" style="width: 6px; height: 6px;"></span>
+                        <span data-i18n="chat_status_online">Online &bull; Career Security</span>
+                    </small>
+                </div>
+            </div>
+            <button type="button" class="btn btn-link text-white p-0 text-decoration-none fs-6" onclick="toggleChatbot()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Chat Messages Container -->
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="d-flex align-items-start gap-2">
+                <img src="{{ url_for('static', filename='images/bot_avatar.svg') }}" alt="AI Assistant" style="width: 26px; height: 26px; border-radius: 50%;" class="flex-shrink-0 mt-1">
+                <div class="chat-bubble chat-bubble-bot">
+                    <span data-i18n="chat_welcome_msg">👋 Hello! I'm your JobSafe AI Assistant. Ask me how we detect fake jobs, common scam patterns, or how to verify an employer!</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Prompt Chips -->
+        <div class="chat-quick-chips">
+            <span class="chat-chip" onclick="sendQuickPrompt('How do you detect fake jobs?')">How AI detects scams?</span>
+            <span class="chat-chip" onclick="sendQuickPrompt('What is a Telegram scam?')">Telegram scams</span>
+            <span class="chat-chip" onclick="sendQuickPrompt('What is a cashier check scam?')">Advance check scam</span>
+            <span class="chat-chip" onclick="sendQuickPrompt('What does the risk score mean?')">Risk scores</span>
+        </div>
+
+        <!-- Chat Input Bar -->
+        <div class="chatbot-input-bar">
+            <input type="text" id="chatbotUserInput" placeholder="Ask about job fraud safety..." onkeypress="handleChatKeyPress(event)">
+            <button type="button" class="chatbot-send-btn" onclick="sendUserChatMessage()">
+                <i class="fa-solid fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Premium Footer (Pure Purple Accents) -->
+    <footer class="saas-footer mt-5 py-5">
+        <div class="container">
+            <div class="row g-4 justify-content-between">
+                <div class="col-lg-5">
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="brand-icon-wrapper" style="width: 32px; height: 32px;">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                        <span class="fs-5 fw-bold brand-logo-text">JobSafe AI</span>
+                        <span class="version-badge">v2.0</span>
+                    </div>
+                    <div class="text-secondary small fw-semibold mb-2" data-i18n="brand_subtitle">AI Fake Job Detection System</div>
+                    <p class="text-muted small mb-3 lh-base" data-i18n="footer_about_text">
+                        AI-powered analysis for detecting deceptive and fraudulent job postings. Safeguarding candidates and university graduates with Natural Language Processing and supervised classification.
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-white text-secondary border font-monospace fs-8">Random Forest</span>
+                        <span class="badge bg-white text-secondary border font-monospace fs-8">TF-IDF Vectorizer</span>
+                        <span class="badge bg-white text-secondary border font-monospace fs-8">Scikit-Learn</span>
+                        <span class="badge bg-white text-secondary border font-monospace fs-8">Flask</span>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <h6 class="text-dark fw-bold mb-3 fs-7 text-uppercase tracking-wider" data-i18n="footer_nav_heading">Navigation</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><a href="{{ url_for('dashboard') }}" class="text-secondary text-decoration-none hover-purple" data-i18n="nav_home">Home</a></li>
+                        <li><a href="{{ url_for('analyzer') }}" class="text-secondary text-decoration-none hover-purple" data-i18n="nav_detect">Fake Job Detection</a></li>
+                        <li><a href="{{ url_for('offer_letter') }}" class="text-secondary text-decoration-none hover-purple" data-i18n="nav_offer_letter">Offer Letter Verification</a></li>
+                        <li><a href="{{ url_for('history') }}" class="text-secondary text-decoration-none hover-purple" data-i18n="nav_history">History</a></li>
+                        <li><a href="{{ url_for('analytics') }}" class="text-secondary text-decoration-none hover-purple" data-i18n="nav_analytics">Analytics</a></li>
+                        <li><a href="{{ url_for('about') }}" class="text-secondary text-decoration-none hover-purple" data-i18n="nav_about">About</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <h6 class="text-dark fw-bold mb-3 fs-7 text-uppercase tracking-wider" data-i18n="footer_scam_heading">Scam Vectors</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2 small">
+                        <li><span class="text-muted">Advance Check Scams</span></li>
+                        <li><span class="text-muted">Package Forwarding</span></li>
+                        <li><span class="text-muted">Telegram Interviews</span></li>
+                        <li><span class="text-muted">Free Webmail Domains</span></li>
+                        <li><span class="text-muted">Crypto Mule Schemes</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-top mt-4 pt-3 d-flex flex-wrap justify-content-between align-items-center small text-muted">
+                <div>
+                    &copy; 2026 JobSafe AI &bull; AI Fake Job Detection System. All rights reserved.
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <span class="text-success fw-medium"><i class="fa-solid fa-circle-check me-1"></i> System Operational</span>
+                    <span>&bull;</span>
+                    <span class="fw-medium">Benchmark Accuracy: 100.0%</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive 5-Stage Pipeline Studio Modal -->
+    {% include "pipeline_modal.html" %}
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core Application & Translation Scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

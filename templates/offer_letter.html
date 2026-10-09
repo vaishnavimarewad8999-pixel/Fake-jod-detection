@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+
+{% block title %}AI Offer Letter Verification - JobSafe AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <div class="d-inline-flex align-items-center gap-1.5 px-3 py-1 rounded-pill mb-2 fs-8 fw-bold" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(108, 43, 217, 0.2);">
+                <i class="fa-solid fa-file-shield text-purple"></i> <span data-i18n="badge_offer_verification">AI FRAUD DEFENSE &bull; OFFER VERIFICATION</span>
+            </div>
+            <h1 class="display-6 fw-bold text-dark mb-1 tracking-tight" data-i18n="offer_page_title">
+                AI Offer Letter Verification
+            </h1>
+            <p class="text-secondary small mb-0" data-i18n="offer_page_subtitle">
+                Upload an employment offer letter and analyze it for potential fraud indicators.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-saas-secondary btn-sm px-3">
+                <i class="fa-solid fa-house me-1"></i> <span data-i18n="nav_dashboard">Dashboard</span>
+            </a>
+            <a href="{{ url_for('analyzer') }}" class="btn btn-saas-secondary btn-sm px-3">
+                <i class="fa-solid fa-magnifying-glass-chart me-1"></i> <span data-i18n="nav_detect">Fake Job Detection</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- 1-Click Interactive Demo Presets Bar -->
+    <div class="saas-card p-3 p-md-3.5 mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2.5">
+            <div class="d-flex align-items-center gap-2">
+                <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: var(--gradient-primary); font-size: 0.85rem;">
+                    <i class="fa-solid fa-flask-vial"></i>
+                </div>
+                <span class="fw-bold text-dark fs-7" data-i18n="offer_demo_title">Try Demo Offer Letters:</span>
+            </div>
+
+            <div class="d-flex flex-wrap gap-2">
+                <form action="{{ url_for('offer_letter') }}" method="POST" class="d-inline" onsubmit="showOfferScanOverlay()">
+                    <input type="hidden" name="demo_type" value="genuine">
+                    <button type="submit" class="preset-pill preset-pill-safe">
+                        <i class="fa-solid fa-circle-check"></i> <span>Sample Genuine Offer (Google L5)</span>
+                    </button>
+                </form>
+                <form action="{{ url_for('offer_letter') }}" method="POST" class="d-inline" onsubmit="showOfferScanOverlay()">
+                    <input type="hidden" name="demo_type" value="scam_deposit">
+                    <button type="submit" class="preset-pill preset-pill-fake">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span>Sample Scam: Laptop Deposit Fee</span>
+                    </button>
+                </form>
+                <form action="{{ url_for('offer_letter') }}" method="POST" class="d-inline" onsubmit="showOfferScanOverlay()">
+                    <input type="hidden" name="demo_type" value="scam_check">
+                    <button type="submit" class="preset-pill preset-pill-fake">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span>Sample Scam: Cashier Check</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Form Card -->
+    <div class="saas-card p-4 p-md-4.5 mb-4" id="uploadCard">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+            <div>
+                <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-purple"></i> <span data-i18n="upload_heading">Upload Offer Letter</span>
+                </h5>
+                <small class="text-muted" data-i18n="upload_hint">Select a digital PDF or high-resolution photo/scan of the employment contract</small>
+            </div>
+            <span class="badge" style="background: var(--bg-lavender); color: var(--purple-primary); font-family: 'JetBrains Mono', monospace;">Max 10 MB</span>
+        </div>
+
+        <form action="{{ url_for('offer_letter') }}" method="POST" enctype="multipart/form-data" id="offerLetterForm" onsubmit="return handleOfferSubmit()">
+            <div class="row g-4 align-items-center mb-3">
+                <!-- Dropzone Column -->
+                <div class="col-lg-7">
+                    <!-- Drag and Drop Dropzone -->
+                    <div class="offer-dropzone text-center p-4 p-md-4.5 mb-3" id="offerDropzone" onclick="document.getElementById('offerFileInput').click()">
+                        <input type="file" name="offer_file" id="offerFileInput" accept=".pdf,.png,.jpg,.jpeg" class="d-none" onchange="handleFileSelect(this)">
+                        
+                        <div class="mb-3">
+                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 64px; height: 64px; background: var(--bg-lavender); color: var(--purple-primary); font-size: 1.7rem; border: 2px dashed rgba(108, 43, 217, 0.4);">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                            </div>
+                        </div>
+
+                        <h5 class="fw-bold text-dark mb-1">
+                            📄 <span data-i18n="dropzone_title">Upload Offer Letter</span>
+                        </h5>
+                        <p class="text-secondary small mb-3" data-i18n="dropzone_desc">
+                            Drag &amp; drop your file here or <span class="text-purple fw-bold text-decoration-underline" style="cursor: pointer;">browse</span>
+                        </p>
+
+                        <!-- Supported Formats Badges -->
+                        <div class="d-flex justify-content-center align-items-center gap-2 flex-wrap mb-1">
+                            <span class="badge py-1 px-2.5 rounded-pill" style="background: #ede9fe; color: #5b21b6; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;">PDF</span>
+                            <span class="badge py-1 px-2.5 rounded-pill" style="background: #ede9fe; color: #5b21b6; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;">JPG</span>
+                            <span class="badge py-1 px-2.5 rounded-pill" style="background: #ede9fe; color: #5b21b6; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;">JPEG</span>
+                            <span class="badge py-1 px-2.5 rounded-pill" style="background: #ede9fe; color: #5b21b6; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;">PNG</span>
+                        </div>
+                    </div>
+
+                    <!-- Selected File Information Pill (Hidden initially) -->
+                    <div id="fileSelectedPill" class="d-none p-3 rounded-3 mb-3 d-flex align-items-center justify-content-between" style="background: #faf5ff; border: 1.5px solid rgba(108, 43, 217, 0.25);">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 38px; height: 38px; background: var(--gradient-primary); font-size: 1rem;">
+                                <i class="fa-solid fa-file-lines" id="fileTypeIcon"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold text-dark fs-7" id="selectedFileName">filename.pdf</div>
+                                <small class="text-muted font-monospace fs-8" id="selectedFileSize">0.0 KB</small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger border-0 rounded-circle" onclick="clearOfferFile(event)" title="Remove file">
+                            <i class="fa-solid fa-xmark fs-6"></i>
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-flex flex-wrap gap-2.5">
+                        <button type="submit" class="btn btn-saas-primary flex-grow-1 py-2.5 fw-bold fs-6" id="btnAnalyzeOffer">
+                            <i class="fa-solid fa-wand-magic-sparkles me-1.5"></i>
+                            <span data-i18n="btn_analyze_offer">Analyze Offer Letter</span>
+                        </button>
+                        <button type="button" class="btn btn-saas-secondary px-4 py-2.5" onclick="clearOfferFile(event)">
+                            <i class="fa-solid fa-rotate-left me-1"></i>
+                            <span data-i18n="btn_clear_offer">Clear</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Feature Illustration Column -->
+                <div class="col-lg-5 d-none d-lg-block text-center">
+                    <div class="p-3.5 rounded-4 h-100 d-flex flex-column justify-content-center align-items-center" style="background: linear-gradient(180deg, #faf5ff 0%, #ffffff 100%); border: 1.5px solid rgba(108, 43, 217, 0.12);">
+                        <img src="{{ url_for('static', filename='images/offer_verify_illustration.svg') }}" 
+                             alt="Employment offer letter, verification checkmark, AI scanning, and security shield" 
+                             class="img-fluid mb-2" 
+                             style="max-height: 200px; filter: drop-shadow(0 10px 20px rgba(108, 43, 217, 0.12));">
+                        <h6 class="fw-bold text-dark mb-1">Contract Authenticity Verification</h6>
+                        <p class="text-secondary small mb-2 px-2" style="font-size: 0.82rem;">
+                            Evaluates appointment letters for equipment fees, cashier check scams, and unauthorized chat recruitment.
+                        </p>
+                        <div class="d-flex flex-wrap justify-content-center gap-1.5">
+                            <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #ede9fe; color: #5b21b6; font-size: 0.7rem;">OCR &amp; Text Parsing</span>
+                            <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #ede9fe; color: #5b21b6; font-size: 0.7rem;">10 Fraud Vectors</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy & Speed Note -->
+            <div class="d-flex align-items-center justify-content-between mt-3 pt-2 text-muted fs-8 border-top">
+                <span><i class="fa-solid fa-lock text-purple me-1"></i> <span data-i18n="footer_privacy_note">Private &amp; Secure OCR Text Extraction</span></span>
+                <span><i class="fa-solid fa-shield-halved text-purple me-1"></i> <span data-i18n="footer_heuristic_note">10 Scam Detection Heuristics</span></span>
+            </div>
+        </form>
+    </div>
+
+    <!-- ====================================================================
+         RESULTS SECTION (Renders when analysis completes)
+         ==================================================================== -->
+    {% if analysis %}
+    <div class="row g-4 mt-2" id="offerResultsSection">
+
+        <!-- LEFT COLUMN: Document Preview -->
+        <div class="col-lg-6">
+            <div class="saas-card p-4 h-100 d-flex flex-column">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-file-lines text-purple"></i> Document Preview
+                        </h5>
+                        <small class="text-muted">{{ filename }}</small>
+                    </div>
+                    <span class="badge py-1 px-2.5 rounded-pill font-monospace" style="background: var(--bg-lavender); color: var(--purple-primary); text-transform: uppercase;">
+                        {{ file_type or 'DOC' }}
+                    </span>
+                </div>
+
+                <!-- Preview Area -->
+                <div class="flex-grow-1 d-flex flex-column">
+                    {% if preview_url and file_type in ['jpg', 'jpeg', 'png'] %}
+                    <!-- Image Preview -->
+                    <div class="text-center p-2 rounded-3 border bg-light mb-3 overflow-auto" style="max-height: 480px;">
+                        <img src="{{ preview_url }}" class="img-fluid rounded shadow-sm" alt="Offer Letter Preview" style="max-height: 460px; object-fit: contain;">
+                    </div>
+                    {% elif preview_url and file_type == 'pdf' %}
+                    <!-- PDF Preview (Embedded iframe) -->
+                    <div class="rounded-3 border overflow-hidden mb-3" style="height: 480px;">
+                        <iframe src="{{ preview_url }}" class="w-100 h-100 border-0" title="PDF Preview"></iframe>
+                    </div>
+                    {% else %}
+                    <!-- Stylized Letter Document Preview Paper -->
+                    <div class="p-4 rounded-3 border mb-3 flex-grow-1 overflow-auto" style="background: #ffffff; box-shadow: inset 0 0 10px rgba(0,0,0,0.03); max-height: 480px; font-family: 'Georgia', serif; font-size: 0.9rem; line-height: 1.6; color: #2d3748;">
+                        <div class="border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center">
+                            <div class="fw-bold text-purple font-monospace fs-7 text-uppercase"><i class="fa-solid fa-stamp me-1"></i> Employment Document</div>
+                            <span class="badge bg-secondary font-monospace fs-8">Extracted OCR Text</span>
+                        </div>
+                        <div style="white-space: pre-line;">{{ extracted_text }}</div>
+                    </div>
+                    {% endif %}
+
+                    <!-- Extracted Text with Suspicious Phrases Highlighted -->
+                    <div class="accordion" id="accordionExtractedText">
+                        <div class="accordion-item border-0 saas-card-flat">
+                            <h2 class="accordion-header" id="headingOne">
+                                <button class="accordion-button collapsed py-2.5 px-3 fs-8 fw-bold text-dark rounded-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" style="background: var(--bg-lavender);">
+                                    <i class="fa-solid fa-highlighter text-purple me-2"></i> View Semantic Highlighted Clauses
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExtractedText">
+                                <div class="accordion-body p-3 mt-2 rounded-3 border bg-white fs-8 font-monospace" style="max-height: 250px; overflow-y: auto; line-height: 1.6;">
+                                    {{ analysis.highlighted_text | safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: AI Analysis Results Card -->
+        <div class="col-lg-6">
+            
+            <!-- Result Banner Card (White with Status Accent) -->
+            <div class="verdict-box verdict-box-{{ analysis.status_color }} p-4 mb-4">
+                
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                    <div class="status-pill-lg status-pill-{{ analysis.status_color }}">
+                        <i class="fa-solid {% if analysis.status_color == 'danger' %}fa-triangle-exclamation{% elif analysis.status_color == 'warning' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %}"></i>
+                        <span>{{ analysis.badge_text }}</span>
+                    </div>
+
+                    <div class="text-end">
+                        <span class="text-muted small d-block">Document Verdict</span>
+                        <span class="font-monospace fw-bold text-{{ analysis.status_color }} fs-6">{{ analysis.verdict }}</span>
+                    </div>
+                </div>
+
+                <!-- Animated Risk Gauge & Headline -->
+                <div class="d-flex align-items-center gap-4 my-3">
+                    <div class="saas-gauge-wrap">
+                        <svg class="saas-gauge-svg" viewBox="0 0 100 100" width="115" height="115">
+                            <circle class="saas-gauge-bg" cx="50" cy="50" r="42" fill="none" stroke-width="8"/>
+                            <circle class="saas-gauge-fill saas-gauge-{{ analysis.status_color }}" cx="50" cy="50" r="42" fill="none" stroke-width="8"
+                                stroke-dasharray="263.89"
+                                stroke-dashoffset="{{ 263.89 - (263.89 * analysis.risk_score / 100) }}"
+                                stroke-linecap="round"/>
+                        </svg>
+                        <div class="saas-gauge-text">
+                            <span class="saas-gauge-number">{{ analysis.risk_score }}%</span>
+                            <span class="saas-gauge-sub">Risk Score</span>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <h3 class="fw-bold text-dark mb-1 tracking-tight">{{ analysis.verdict }}</h3>
+                        <p class="text-secondary small mb-0 lh-sm">{{ analysis.analysis_summary }}</p>
+                    </div>
+                </div>
+
+                <!-- Action Toolbar -->
+                <div class="d-flex flex-wrap gap-2 pt-3 border-top mt-3">
+                    <button type="button" class="btn btn-saas-secondary btn-sm px-3" onclick="copyOfferSummary()">
+                        <i class="fa-regular fa-copy me-1"></i> <span>Copy Summary</span>
+                    </button>
+                    <button type="button" class="btn btn-saas-secondary btn-sm px-3" onclick="window.print()">
+                        <i class="fa-solid fa-print me-1"></i> <span>Print / PDF</span>
+                    </button>
+                    <a href="{{ url_for('offer_letter') }}" class="btn btn-saas-primary btn-sm px-3 ms-auto">
+                        <i class="fa-solid fa-file-circle-plus me-1"></i> <span>Verify Another</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Red Flags & Scam Indicators List -->
+            <div class="saas-card p-4 mb-4">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-flag text-danger"></i> <span>Red Flags &amp; Scam Indicators</span>
+                    </h6>
+                    <span class="badge font-monospace" style="background: {% if analysis.red_flag_count > 0 %}var(--danger-red-bg){% else %}var(--safe-green-bg){% endif %}; color: {% if analysis.red_flag_count > 0 %}var(--danger-red){% else %}var(--safe-green){% endif %}; border: 1px solid {% if analysis.red_flag_count > 0 %}var(--danger-red-border){% else %}var(--safe-green-border){% endif %};">
+                        {{ analysis.red_flag_count }} Triggered
+                    </span>
+                </div>
+
+                {% if analysis.red_flags %}
+                    <div class="d-flex flex-column gap-2.5">
+                        {% for flag in analysis.red_flags %}
+                        <div class="saas-flag-item saas-flag-{{ flag.severity | lower }}">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="fw-bold text-dark fs-7">{{ flag.category }}</span>
+                                <span class="badge bg-{% if flag.severity == 'CRITICAL' or flag.severity == 'HIGH' %}danger{% elif flag.severity == 'MEDIUM' %}warning text-dark{% else %}secondary{% endif %} fs-8 px-2 py-0.5 rounded text-uppercase font-monospace">
+                                    {{ flag.severity }}
+                                </span>
+                            </div>
+                            <p class="text-secondary small mb-1.5 lh-sm">{{ flag.reason }}</p>
+                            
+                            {% if flag.matched_terms %}
+                            <div class="d-flex flex-wrap align-items-center gap-1.5 mt-1">
+                                <span class="text-muted fs-8">Detected Indicators:</span>
+                                {% for term in flag.matched_terms %}
+                                <span class="badge bg-danger-subtle text-danger font-monospace fs-8 border border-danger-subtle">{{ term }}</span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="p-3.5 rounded-3 text-center" style="background: var(--safe-green-bg); border: 1px solid var(--safe-green-border);">
+                        <i class="fa-solid fa-shield-heart fs-3 mb-2" style="color: var(--safe-green);"></i>
+                        <h6 class="fw-bold text-dark mb-1">No Deceptive Red Flags Found</h6>
+                        <p class="text-secondary small mb-0">
+                            The analyzed offer letter does not contain demands for upfront equipment fees, cashier check cashing, or unverified chat recruitment.
+                        </p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Recommended Actions Box -->
+            <div class="saas-card p-4 mb-4">
+                <div class="d-flex align-items-center gap-2 mb-2 pb-2 border-bottom">
+                    <i class="fa-solid fa-compass text-purple"></i>
+                    <h6 class="fw-bold text-dark mb-0">Recommended Action</h6>
+                </div>
+                <div class="p-3 rounded-3" style="background: var(--bg-lavender); border-left: 4px solid var(--purple-primary);">
+                    <p class="text-dark small mb-0 fw-medium lh-base">
+                        {{ analysis.recommended_action }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- AI Disclaimer Box -->
+            <div class="p-3 rounded-3 border text-center" style="background: #fafafa; border-color: #e2e8f0 !important;">
+                <p class="text-muted fs-8 mb-0">
+                    <i class="fa-solid fa-circle-info text-secondary me-1"></i>
+                    <strong>Disclaimer:</strong> {{ analysis.disclaimer }}
+                </p>
+            </div>
+
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Animated Scanning Overlay Modal -->
+<div id="offerScanOverlay" class="d-none position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(31, 22, 51, 0.75); backdrop-filter: blur(6px); z-index: 9999;">
+    <div class="saas-card p-4 text-center shadow-lg" style="max-width: 380px; border-color: rgba(108, 43, 217, 0.4);">
+        <div class="mb-3">
+            <div class="spinner-border text-purple" style="width: 3.5rem; height: 3.5rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <h5 class="fw-bold text-dark mb-1">AI is analyzing your offer letter...</h5>
+        <p class="text-muted small mb-0">Extracting document text &bull; Checking fraud vectors &bull; Calculating risk score</p>
+    </div>
+</div>
+
+<script>
+    // Drag and drop event wiring
+    const dropzone = document.getElementById("offerDropzone");
+    const fileInput = document.getElementById("offerFileInput");
+    const fileSelectedPill = document.getElementById("fileSelectedPill");
+    const selectedFileName = document.getElementById("selectedFileName");
+    const selectedFileSize = document.getElementById("selectedFileSize");
+    const fileTypeIcon = document.getElementById("fileTypeIcon");
+
+    if (dropzone) {
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.style.borderColor = "var(--purple-primary)";
+                dropzone.style.background = "#f5f3ff";
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropzone.style.borderColor = "";
+                dropzone.style.background = "";
+            }, false);
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files && files.length > 0) {
+                fileInput.files = files;
+                handleFileSelect(fileInput);
+            }
+        });
+    }
+
+    function handleFileSelect(input) {
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            const ext = file.name.split('.').pop().toLowerCase();
+            const allowed = ['pdf', 'jpg', 'jpeg', 'png'];
+
+            if (!allowed.includes(ext)) {
+                alert("Unsupported file format! Please upload a PDF, JPG, JPEG, or PNG document.");
+                input.value = "";
+                fileSelectedPill.classList.add("d-none");
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                alert("File size exceeds 10MB limit! Please choose a smaller document.");
+                input.value = "";
+                fileSelectedPill.classList.add("d-none");
+                return;
+            }
+
+            selectedFileName.textContent = file.name;
+            const sizeKb = (file.size / 1024).toFixed(1);
+            const sizeStr = file.size > 1024 * 1024 ? (file.size / (1024 * 1024)).toFixed(2) + " MB" : sizeKb + " KB";
+            selectedFileSize.textContent = sizeStr;
+
+            if (ext === 'pdf') {
+                fileTypeIcon.className = "fa-solid fa-file-pdf";
+            } else {
+                fileTypeIcon.className = "fa-solid fa-file-image";
+            }
+
+            fileSelectedPill.classList.remove("d-none");
+        }
+    }
+
+    function clearOfferFile(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        if (fileInput) fileInput.value = "";
+        if (fileSelectedPill) fileSelectedPill.classList.add("d-none");
+    }
+
+    function handleOfferSubmit() {
+        if (!fileInput.files || fileInput.files.length === 0) {
+            alert("Please select or drop an offer letter file to analyze.");
+            return false;
+        }
+        showOfferScanOverlay();
+        return true;
+    }
+
+    function showOfferScanOverlay() {
+        const overlay = document.getElementById("offerScanOverlay");
+        if (overlay) {
+            overlay.classList.remove("d-none");
+        }
+    }
+
+    function copyOfferSummary() {
+        const summary = `JobSafe AI Offer Letter Verification\nVerdict: {{ analysis.verdict if analysis else '' }}\nRisk Score: {{ analysis.risk_score if analysis else '' }}%\nSummary: {{ analysis.analysis_summary if analysis else '' }}\nRecommendation: {{ analysis.recommended_action if analysis else '' }}`;
+        navigator.clipboard.writeText(summary).then(() => {
+            alert("Analysis summary copied to clipboard!");
+        });
+    }
+</script>
+{% endblock %}

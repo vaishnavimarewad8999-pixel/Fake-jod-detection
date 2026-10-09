@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Scan History - JobShield AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="h3 fw-bold text-dark mb-1">Audit & Scan History</h1>
+            <p class="text-secondary small mb-0">Record of verified and analyzed employment advertisements.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <form action="{{ url_for('clear_history') }}" method="POST" onsubmit="return confirm('Are you sure you want to clear scan history?');">
+                <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">
+                    <i class="fa-regular fa-trash-can me-1"></i> Clear Log
+                </button>
+            </form>
+            <a href="{{ url_for('index') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+                <i class="fa-solid fa-plus me-1"></i> New Scan
+            </a>
+        </div>
+    </div>
+
+    <!-- History Table -->
+    <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+        <div class="card-body p-0">
+            {% if history %}
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light fs-7">
+                        <tr>
+                            <th class="ps-3">#</th>
+                            <th>Timestamp</th>
+                            <th>Job Title</th>
+                            <th>Company</th>
+                            <th>Risk Score</th>
+                            <th>Verdict</th>
+                            <th class="pe-3 text-end">Red Flags</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fs-7">
+                        {% for item in history %}
+                        <tr>
+                            <td class="ps-3 text-muted">{{ item.id }}</td>
+                            <td class="font-monospace small text-secondary">{{ item.timestamp }}</td>
+                            <td class="fw-semibold text-dark">{{ item.title }}</td>
+                            <td class="text-secondary">{{ item.company or 'Unspecified' }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="progress flex-grow-1" style="height: 6px; width: 70px;">
+                                        <div class="progress-bar bg-{{ item.status_color }}" role="progressbar" style="width: {{ item.risk_percentage }}%"></div>
+                                    </div>
+                                    <span class="font-monospace fw-bold text-{{ item.status_color }}">{{ item.risk_percentage }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ item.status_color }}-subtle text-{{ item.status_color }} border border-{{ item.status_color }}-subtle rounded-pill px-2.5 py-1">
+                                    {{ item.verdict }}
+                                </span>
+                            </td>
+                            <td class="pe-3 text-end">
+                                {% if item.red_flag_count > 0 %}
+                                <span class="badge bg-danger text-white rounded-pill px-2">
+                                    {{ item.red_flag_count }}
+                                </span>
+                                {% else %}
+                                <span class="badge bg-success-subtle text-success border rounded-pill px-2">
+                                    0
+                                </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fa-solid fa-folder-open text-muted fs-1 mb-2"></i>
+                <h6 class="fw-bold text-dark">No Scans Recorded Yet</h6>
+                <p class="text-secondary small mb-3">Run an analysis from the Job Scanner page to begin tracking job posting audits.</p>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                    Go to Scanner
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

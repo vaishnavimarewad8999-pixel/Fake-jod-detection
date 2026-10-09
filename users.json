@@ -1,0 +1,114 @@
+{
+  "admin": {
+    "username": "admin",
+    "email": "admin@jobsafe.ai",
+    "name": "System Administrator",
+    "password_hash": "scrypt:32768:8:1$CHneXtPLkXzIXjYm$b094492ba4e0121569dd69f25d2527fd212720c01fd087bb9ba992778ef72c42282d1ddac29d16c83c3410887e253ef85222f94acf0c5075dcd0c5ebb1670fca",
+    "language": "en"
+  },
+  "sarahc": {
+    "username": "sarahc",
+    "email": "sarah@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$9in0rll5J8zfZYmJ$c9574be48fce4d9aaf94ec5839b63e9446769bd38b15f7328b97bdbcbddf8810d47b65e34a9fc672048bef787c9311ab5454bb4ac2f867ab0110a84361527b2b",
+    "language": "en"
+  },
+  "sarahc_1d595e": {
+    "username": "sarahc_1d595e",
+    "email": "sarah_1d595e@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$uGn2bsGyda3xnped$9a02313f3c0b56bd76bd147bf20e516b8dc8a0a78f2a78e5a9ded901a0c614d2e024a3b4f14c60b19f65f344522942b21bce6bb1354c83d6e6af2cdc43d4d840",
+    "language": "en"
+  },
+  "vaishumarewad": {
+    "username": "vaishumarewad",
+    "email": "vaishumarewad@gmail.com",
+    "name": "Vaishnavi Marewad",
+    "password_hash": "scrypt:32768:8:1$EC4K0xqnemv8sNey$ca67b9e144e779700c3aff9df17f965d6e447c4e87bee34cfee776dd9852d0f08c1d99b31acbc6d7128c93ec060a4120d88289986795296eabb8abc962b86676",
+    "language": "en"
+  },
+  "sarahc_8d8e79": {
+    "username": "sarahc_8d8e79",
+    "email": "sarah_8d8e79@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$yV95vXg4XlcE58Sk$28559450069132632bcecc29003a25d218a3a575ddebbbadac6e35590adb4de23522caa8165a007a4cb895b410da6fae0f81aedce25f4c63d20cf5e246a5ec1a",
+    "language": "en"
+  },
+  "sarahc_1a98c1": {
+    "username": "sarahc_1a98c1",
+    "email": "sarah_1a98c1@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$VxEE8A6LkjFcxMQ2$9dec61037a32dad0b72c95a7f5d94b137a4a42152e5c9204a3e9853da5451cc7ffc6d45acc0fa93b251d067be06d4bdb222238847a2475f05ced6f2cf9b0afb1",
+    "language": "en"
+  },
+  "sarahc_5d5398": {
+    "username": "sarahc_5d5398",
+    "email": "sarah_5d5398@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$fTHOke2Oed78zydz$228154fe812796733abed6d5f8b7359c144057c169c575e5ba563307ca4e30331e8b0b481556c196b0fa38eef3f6e308d524745fb18bc7587d3bdde57ec1a23a",
+    "language": "en"
+  },
+  "sarahc_a540d1": {
+    "username": "sarahc_a540d1",
+    "email": "sarah_a540d1@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$NwL7QUNM1o4V942D$a5c06a170ffda68b9b8d2be0e074fe440f4e8ebdcbff7f56c1c54c8ee7ee4ce9145246645c4a10a482f5e36e884d12a6913358c4d116b68586c2c714a9e43ae8",
+    "language": "en"
+  },
+  "sarahc_9550c9": {
+    "username": "sarahc_9550c9",
+    "email": "sarah_9550c9@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$Ri8fEnjKgUp4XUTt$4b79fd44f6af08a90be855bbb951afcf35af022e31f3fd831367be735ecdf77c941004a5a5005ffd2e6ce3e8134d85712461314c6d775bc1cf9c483d9364926d",
+    "language": "en"
+  },
+  "sam0001": {
+    "username": "sam0001",
+    "email": "saymaharkare1910@gmail.com",
+    "name": "Sayma Harkare",
+    "password_hash": "scrypt:32768:8:1$HfxoPMRNR9iQAJpf$26423d68ebc5544c4eaca5aed6de3a1026f339d5492efdedaf99d388cd89b703e813ffdc6dcea9931e4a9fa7fffad227e9bdab44f1fd2111cf4906ccf3e5b168",
+    "language": "en"
+  },
+  "sarahc_2ed3e6": {
+    "username": "sarahc_2ed3e6",
+    "email": "sarah_2ed3e6@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$SC2pbuqE7cLu8lht$bf65beb672f7d4f7d9e205f52b3e03fb9a404ffcce2bf7034ab829bd5cef33a1983a7bcf020a6190c7ec594368ac2f108bae152312790603950b203b330d1370",
+    "language": "en"
+  },
+  "sarahc_2fa44c": {
+    "username": "sarahc_2fa44c",
+    "email": "sarah_2fa44c@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$KU6RFiUAHnIrsUeK$3899ec4fc8acb54388a50ae1ab1c46aacf8623bb177bd9eeaab909d5504755cc406cacd540ad5ede88e8ed2078494bc7af0de6c7abbcbcda067ac05fb3c23586",
+    "language": "en"
+  },
+  "sarahc_3b3b0a": {
+    "username": "sarahc_3b3b0a",
+    "email": "sarah_3b3b0a@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$zUctfbJpE3nAQzNs$933e0600bf6b47d4decfcfbcfd7ca94f5e1ecd0f2a9297119f9985c0b4c8c34b2b54e17b975ead348ea7aea8390a3c91468db963a30d68ed34b25a97d4e5b3da",
+    "language": "en"
+  },
+  "sarahc_9eb765": {
+    "username": "sarahc_9eb765",
+    "email": "sarah_9eb765@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$6stPrTsJ7e99TxT7$8cba94781de3cc0ba82b292b5f778809dacea5522c3debcabfa685953105166a7779167f5811ca2fd10ba22020715995d453d0f9c52fbac4326c9bb2976c90bd",
+    "language": "en"
+  },
+  "sarahc_ca765c": {
+    "username": "sarahc_ca765c",
+    "email": "sarah_ca765c@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$OGPN8HxngJHTw0d4$c9f6d87dfeda30c983d3b090cbc7cffe3a2f16dc7e4015c20756f3e8c8aad3eab9c898c60fb13ee75152197bcccf017e083e9d5d6115c18d32c596d794ddd256",
+    "language": "en"
+  },
+  "sarahc_95ccc4": {
+    "username": "sarahc_95ccc4",
+    "email": "sarah_95ccc4@skynet.com",
+    "name": "Sarah Connor",
+    "password_hash": "scrypt:32768:8:1$oEQUNYDeHcsuNthF$2d9465f438e0640b150bfcac057c34a0a9e1296bd9ae8e94eb75bff14b4251fb9b653d4433ca828f4971d0a27ed790c48282698ff3609b15221b1b25c62d50c0",
+    "language": "en"
+  }
+}

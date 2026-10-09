@@ -1,0 +1,51 @@
+{
+    "champion_model": "Random Forest",
+    "models": {
+        "Random Forest": {
+            "accuracy": 100.0,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1_score": 100.0,
+            "roc_auc": 100.0,
+            "confusion_matrix": {
+                "true_negative": 500,
+                "false_positive": 0,
+                "false_negative": 0,
+                "true_positive": 300
+            }
+        },
+        "Logistic Regression": {
+            "accuracy": 100.0,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1_score": 100.0,
+            "roc_auc": 100.0,
+            "confusion_matrix": {
+                "true_negative": 500,
+                "false_positive": 0,
+                "false_negative": 0,
+                "true_positive": 300
+            }
+        },
+        "Multinomial Naive Bayes": {
+            "accuracy": 100.0,
+            "precision": 100.0,
+            "recall": 100.0,
+            "f1_score": 100.0,
+            "roc_auc": 100.0,
+            "confusion_matrix": {
+                "true_negative": 500,
+                "false_positive": 0,
+                "false_negative": 0,
+                "true_positive": 300
+            }
+        }
+    },
+    "dataset_stats": {
+        "total_records": 4000,
+        "real_jobs": 2500,
+        "fake_jobs": 1500,
+        "train_samples": 3200,
+        "test_samples": 800
+    }
+}

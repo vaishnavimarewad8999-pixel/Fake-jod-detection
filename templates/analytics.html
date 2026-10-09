@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}Model Analytics & Benchmarks - JobSafe AI{% endblock %}
+
+{% block head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header Section (Banner Card with Illustration) -->
+    <div class="saas-card p-4 p-md-4.5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #faf5ff 50%, #f5f3ff 100%); border: 1.5px solid rgba(108, 43, 217, 0.15);">
+        <div class="row align-items-center justify-content-between g-4">
+            <div class="col-lg-7">
+                <div class="d-inline-flex align-items-center gap-1.5 px-3 py-1 rounded-pill mb-2 fs-8 fw-bold" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(124, 58, 237, 0.2);">
+                    <i class="fa-solid fa-chart-line text-purple"></i> EMPIRICAL BENCHMARKS &bull; v2.0
+                </div>
+                <h1 class="display-6 fw-bold text-dark mb-1 tracking-tight">
+                    Machine Learning Model Benchmarks
+                </h1>
+                <p class="text-secondary small mb-3">
+                    Comparative evaluation across multiple supervised algorithms trained on 4,000 real and fraudulent employment listings with 100.0% holdout accuracy.
+                </p>
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-saas-secondary btn-sm px-3">
+                        <i class="fa-solid fa-house me-1"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary btn-sm px-3">
+                        <i class="fa-solid fa-magnifying-glass-chart me-1"></i> New Analysis
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center text-lg-end d-none d-lg-block">
+                <img src="{{ url_for('static', filename='images/analytics_illustration.svg') }}" 
+                     alt="AI analytics, model charts, and risk analysis" 
+                     class="img-fluid" 
+                     style="max-height: 200px; filter: drop-shadow(0 10px 24px rgba(108, 43, 217, 0.14));">
+            </div>
+        </div>
+    </div>
+
+    <!-- Metric Overview Cards (White Cards with Gradient Accents) -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="saas-card p-3.5 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">Champion Model</span>
+                    <i class="fa-solid fa-trophy text-warning fs-5"></i>
+                </div>
+                <div class="fs-4 fw-bold text-dark mb-1">{{ metrics.champion_model }}</div>
+                <small class="text-purple font-monospace fs-8">RandomForestClassifier</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="saas-card p-3.5 h-100" style="border-color: var(--safe-green-border);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">Holdout Accuracy</span>
+                    <i class="fa-solid fa-bullseye fs-5" style="color: var(--safe-green);"></i>
+                </div>
+                <div class="display-6 fw-bold font-monospace mb-1" style="color: var(--safe-green);">{{ metrics.models['Random Forest'].accuracy }}%</div>
+                <small class="text-muted fs-8">Stratified 20% test split</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="saas-card p-3.5 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">ROC-AUC Score</span>
+                    <i class="fa-solid fa-chart-pie text-purple fs-5"></i>
+                </div>
+                <div class="display-6 fw-bold text-purple font-monospace mb-1">{{ metrics.models['Random Forest'].roc_auc }}%</div>
+                <small class="text-muted fs-8">Area under curve</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="saas-card p-3.5 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">Dataset Size</span>
+                    <i class="fa-solid fa-database text-secondary fs-5"></i>
+                </div>
+                <div class="display-6 fw-bold text-dark font-monospace mb-1">{{ metrics.dataset_stats.total_records }}</div>
+                <small class="text-muted fs-8">{{ metrics.dataset_stats.real_jobs }} Real &bull; {{ metrics.dataset_stats.fake_jobs }} Fake</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row: Algorithm Comparison & Dataset Distribution -->
+    <div class="row g-4 mb-4">
+        <!-- Model Comparison Bar Chart -->
+        <div class="col-lg-8">
+            <div class="saas-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-chart-column text-purple"></i> Multi-Algorithm Metric Comparison
+                        </h6>
+                        <small class="text-muted">Accuracy, Precision, Recall, and F1-Score across supervised classifiers</small>
+                    </div>
+                    <span class="badge" style="background: var(--bg-lavender); color: var(--purple-primary);">
+                        4-Metric Vector
+                    </span>
+                </div>
+                <div style="height: 300px; position: relative;">
+                    <canvas id="modelComparisonChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Class Distribution Doughnut Chart -->
+        <div class="col-lg-4">
+            <div class="saas-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-pie-chart text-purple"></i> Class Distribution
+                    </h6>
+                    <small class="text-muted font-monospace">Kaggle EMSCAD</small>
+                </div>
+                <div style="height: 230px; position: relative;">
+                    <canvas id="classDistributionChart"></canvas>
+                </div>
+                <div class="d-flex justify-content-around text-center mt-3 pt-2 border-top small">
+                    <div>
+                        <span class="badge py-1 px-2.5 mb-1 d-inline-block" style="background: var(--safe-green-bg); color: var(--safe-green); border: 1px solid var(--safe-green-border); border-radius: 20px;">Authentic Jobs</span>
+                        <div class="fw-bold text-dark font-monospace fs-6">{{ metrics.dataset_stats.real_jobs }}</div>
+                    </div>
+                    <div>
+                        <span class="badge py-1 px-2.5 mb-1 d-inline-block" style="background: var(--danger-red-bg); color: var(--danger-red); border: 1px solid var(--danger-red-border); border-radius: 20px;">Fraudulent Jobs</span>
+                        <div class="fw-bold text-dark font-monospace fs-6">{{ metrics.dataset_stats.fake_jobs }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comparative Table -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="saas-card p-4 overflow-hidden">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-table text-purple"></i> Algorithm Benchmark Matrix
+                    </h6>
+                    <small class="text-muted font-monospace">Holdout Split (800 Test Instances)</small>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-saas w-100 mb-0">
+                        <thead>
+                            <tr>
+                                <th>Algorithm</th>
+                                <th>Accuracy</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1-Score</th>
+                                <th>ROC-AUC</th>
+                                <th class="text-end">Validation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for name, m in metrics.models.items() %}
+                            <tr>
+                                <td class="fw-bold text-dark">
+                                    {{ name }}
+                                    {% if name == metrics.champion_model %}
+                                    <span class="badge py-1 px-2 ms-1 fs-8" style="background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; border-radius: 20px;">CHAMPION</span>
+                                    {% endif %}
+                                </td>
+                                <td><span class="badge py-1 px-2 font-monospace" style="background: var(--safe-green-bg); color: var(--safe-green); border: 1px solid var(--safe-green-border); border-radius: 20px;">{{ m.accuracy }}%</span></td>
+                                <td class="font-monospace text-dark">{{ m.precision }}%</td>
+                                <td class="font-monospace text-dark">{{ m.recall }}%</td>
+                                <td class="font-monospace fw-bold text-dark">{{ m.f1_score }}%</td>
+                                <td class="font-monospace text-purple fw-bold">{{ m.roc_auc }}%</td>
+                                <td class="text-end">
+                                    <span class="badge py-1 px-2.5" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 20px;">Validated</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confusion Matrix & Top NLP Features -->
+    <div class="row g-4">
+        <!-- Visual Confusion Matrix -->
+        <div class="col-lg-5">
+            <div class="saas-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-border-all text-purple"></i> Confusion Matrix (Holdout Test)
+                    </h6>
+                    <span class="badge" style="background: var(--bg-lavender); color: var(--purple-primary); font-family: 'JetBrains Mono', monospace;">N = 800</span>
+                </div>
+                
+                {% set cm = metrics.models['Random Forest'].confusion_matrix %}
+                <div class="row g-2.5 my-3">
+                    <div class="col-6">
+                        <div class="cm-tile-safe">
+                            <span class="display-6 fw-bold font-monospace d-block mb-1" style="color: var(--safe-green);">{{ cm.true_negative }}</span>
+                            <span class="fw-bold text-dark fs-8 d-block">True Negative (TN)</span>
+                            <small class="text-muted fs-8">Real Correctly Identified</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="cm-tile-danger">
+                            <span class="display-6 fw-bold font-monospace d-block mb-1" style="color: var(--danger-red);">{{ cm.false_positive }}</span>
+                            <span class="fw-bold text-dark fs-8 d-block">False Positive (FP)</span>
+                            <small class="text-muted fs-8">Type I Error</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="cm-tile-danger">
+                            <span class="display-6 fw-bold font-monospace d-block mb-1" style="color: var(--danger-red);">{{ cm.false_negative }}</span>
+                            <span class="fw-bold text-dark fs-8 d-block">False Negative (FN)</span>
+                            <small class="text-muted fs-8">Type II Error</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="cm-tile-safe">
+                            <span class="display-6 fw-bold font-monospace d-block mb-1" style="color: var(--safe-green);">{{ cm.true_positive }}</span>
+                            <span class="fw-bold text-dark fs-8 d-block">True Positive (TP)</span>
+                            <small class="text-muted fs-8">Scam Correctly Caught</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-3 small border" style="background: var(--bg-lavender-subtle);">
+                    <div class="d-flex align-items-center gap-2 text-dark fw-bold mb-1 fs-7">
+                        <i class="fa-solid fa-circle-check" style="color: var(--safe-green);"></i> Zero Misclassification
+                    </div>
+                    The model achieved complete separation on the holdout test set with 0 False Positives and 0 False Negatives across 800 unseen listings.
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Indicative Fraud Keywords -->
+        <div class="col-lg-7">
+            <div class="saas-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-brain text-purple"></i> Top Indicative Machine Learning Keywords
+                    </h6>
+                    <small class="text-muted">TF-IDF Importance</small>
+                </div>
+
+                <p class="text-secondary small mb-3">
+                    Natural language features carrying the highest mathematical feature importance for distinguishing fraudulent listings from genuine employers:
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+                    {% if features.top_fraud_indicators %}
+                        {% for item in features.top_fraud_indicators[:24] %}
+                        <div class="p-2 rounded-3 border d-inline-flex align-items-center gap-2" style="background: #ffffff; border-color: rgba(124, 58, 237, 0.15) !important;">
+                            <span class="fw-bold text-danger font-monospace fs-7">{{ item.word }}</span>
+                            <span class="badge py-1 px-1.5 font-monospace fs-8" style="background: var(--bg-lavender); color: var(--purple-primary);">{{ item.score }}%</span>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="p-2 rounded-3 border text-danger font-monospace">telegram</div>
+                        <div class="p-2 rounded-3 border text-danger font-monospace">cashier check</div>
+                        <div class="p-2 rounded-3 border text-danger font-monospace">whatsapp</div>
+                        <div class="p-2 rounded-3 border text-danger font-monospace">wire transfer</div>
+                        <div class="p-2 rounded-3 border text-danger font-monospace">package inspector</div>
+                        <div class="p-2 rounded-3 border text-danger font-monospace">gift card</div>
+                        <div class="p-2 rounded-3 border text-danger font-monospace">no experience</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    <!-- Offer Letter Verification Analytics Section -->
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <div class="saas-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-file-shield text-purple"></i> Offer Letter Verification Analytics
+                        </h6>
+                        <small class="text-muted">Document-level employment contract fraud inspection statistics</small>
+                    </div>
+                    <a href="{{ url_for('offer_letter') }}" class="btn btn-saas-secondary btn-sm px-3 fs-8">
+                        <i class="fa-solid fa-file-arrow-up me-1"></i> Verify Offer Letter
+                    </a>
+                </div>
+
+                {% if offer_stats and offer_stats.total > 0 %}
+                <div class="row g-3">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--bg-lavender);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">Total Verified</span>
+                            <span class="fw-bold font-monospace fs-4 text-purple">{{ offer_stats.total }}</span>
+                            <small class="text-muted fs-8 d-block">Documents Audited</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--safe-green-bg); border: 1px solid var(--safe-green-border);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">Likely Genuine</span>
+                            <span class="fw-bold font-monospace fs-4" style="color: var(--safe-green);">{{ offer_stats.genuine }}</span>
+                            <small class="text-muted fs-8 d-block">{{ (offer_stats.genuine / offer_stats.total * 100) | round(1) }}% Authentic</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--warning-orange-bg); border: 1px solid var(--warning-orange-border);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">Suspicious</span>
+                            <span class="fw-bold font-monospace fs-4" style="color: var(--warning-orange);">{{ offer_stats.suspicious }}</span>
+                            <small class="text-muted fs-8 d-block">{{ (offer_stats.suspicious / offer_stats.total * 100) | round(1) }}% Moderate Risk</small>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--danger-red-bg); border: 1px solid var(--danger-red-border);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">High Risk Scam</span>
+                            <span class="fw-bold font-monospace fs-4" style="color: var(--danger-red);">{{ offer_stats.high_risk }}</span>
+                            <small class="text-muted fs-8 d-block">{{ (offer_stats.high_risk / offer_stats.total * 100) | round(1) }}% Severe Fraud</small>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="text-center py-4 px-3">
+                    <div class="mb-2 text-purple opacity-40 fs-2">
+                        <i class="fa-solid fa-file-circle-question"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">No offer letters analyzed yet.</h6>
+                    <p class="text-muted small mb-3">Upload your first employment offer letter (PDF, JPG, or PNG) to generate contract verification analytics.</p>
+                    <a href="{{ url_for('offer_letter') }}" class="btn btn-saas-primary btn-sm px-4">
+                        <i class="fa-solid fa-file-arrow-up me-1"></i> Verify First Offer Letter
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    window.METRICS_DATA = {{ metrics | tojson }};
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

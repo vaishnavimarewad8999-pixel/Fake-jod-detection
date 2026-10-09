@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}JobShield AI - Intelligent Fake Job Detection{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Hero Banner -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mx-auto text-center">
+            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill bg-primary-subtle text-primary border border-primary-subtle mb-3 fs-7 fw-medium">
+                <i class="fa-solid fa-wand-magic-sparkles"></i> AI & NLP Fraud Verification Engine
+            </div>
+            <h1 class="display-6 fw-bold tracking-tight text-dark mb-2">
+                Detect Fake Job Postings with Machine Learning
+            </h1>
+            <p class="text-secondary fs-6 lead">
+                Analyze job descriptions, employment terms, and recruiter patterns in seconds to protect yourself from identity theft, advance-fee scams, and deceptive offers.
+            </p>
+        </div>
+    </div>
+
+    <!-- Presets Bar for Instant Demo Testing -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 p-3 bg-white">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <span class="text-secondary fw-semibold fs-7 d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-flask-vial text-primary"></i> Quick Test Presets:
+                    </span>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="loadPreset('real_tech')">
+                            <i class="fa-solid fa-check-circle me-1"></i> Real Tech Job
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3" onclick="loadPreset('real_health')">
+                            <i class="fa-solid fa-check-circle me-1"></i> Real Healthcare Job
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="loadPreset('scam_telegram')">
+                            <i class="fa-solid fa-triangle-exclamation me-1"></i> Fake Data Entry (Telegram)
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="loadPreset('scam_check')">
+                            <i class="fa-solid fa-triangle-exclamation me-1"></i> Fake Upfront Check Scam
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="loadPreset('scam_reship')">
+                            <i class="fa-solid fa-triangle-exclamation me-1"></i> Fake Package Reshipping
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Input Scanner Column -->
+        <div class="col-lg-{% if analysis %}6{% else %}12{% endif %}" id="inputColumn">
+            <div class="card border-0 shadow-sm rounded-4 bg-white overflow-hidden">
+                <!-- Nav Tabs -->
+                <div class="card-header bg-white border-bottom p-3">
+                    <ul class="nav nav-pills card-header-pills" id="scannerTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if not scan_mode or scan_mode == 'form' %}active{% endif %} rounded-pill px-3 py-2 fw-semibold fs-7" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-pane" type="button" role="tab">
+                                <i class="fa-solid fa-table-list me-1"></i> Detailed Form
+                            </button>
+                        </li>
+                        <li class="nav-item ms-2" role="presentation">
+                            <button class="nav-link {% if scan_mode == 'quick' %}active{% endif %} rounded-pill px-3 py-2 fw-semibold fs-7" id="quick-tab" data-bs-toggle="tab" data-bs-target="#quick-pane" type="button" role="tab">
+                                <i class="fa-solid fa-paste me-1"></i> Quick Text / Raw Paste
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-body p-4">
+                    <div class="tab-content" id="scannerTabsContent">
+                        
+                        <!-- TAB 1: DETAILED FORM -->
+                        <div class="tab-pane fade {% if not scan_mode or scan_mode == 'form' %}show active{% endif %}" id="form-pane" role="tabpanel">
+                            <form action="{{ url_for('scan') }}" method="POST" id="detailedScanForm">
+                                <input type="hidden" name="scan_mode" value="form">
+                                
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-7">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Job Title <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" name="title" id="form_title" placeholder="e.g. Senior Software Engineer" value="{{ job_input.title if job_input else '' }}" required>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Company Name</label>
+                                        <input type="text" class="form-control" name="company_name" id="form_company_name" placeholder="e.g. Apex Cloud Tech" value="{{ job_input.company_name if job_input else '' }}">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-secondary fs-7">Company Profile / About</label>
+                                    <textarea class="form-control" name="company_profile" id="form_company_profile" rows="2" placeholder="Brief background of the employer (scams often leave this blank)...">{{ job_input.company_profile if job_input else '' }}</textarea>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-secondary fs-7">Job Description <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" name="description" id="form_description" rows="5" placeholder="Paste the primary job duties, tasks, instructions, or recruitment message..." required>{{ job_input.description if job_input else '' }}</textarea>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Requirements & Qualifications</label>
+                                        <textarea class="form-control" name="requirements" id="form_requirements" rows="3" placeholder="Education, skills, experience required...">{{ job_input.requirements if job_input else '' }}</textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Benefits & Compensation</label>
+                                        <textarea class="form-control" name="benefits" id="form_benefits" rows="3" placeholder="Salary, healthcare, equipment, bonuses...">{{ job_input.benefits if job_input else '' }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Contact / Application Email</label>
+                                        <input type="text" class="form-control" name="contact_email" id="form_contact_email" placeholder="e.g. hr@company.com or @gmail.com" value="{{ job_input.contact_email if job_input else '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Job Features</label>
+                                        <div class="d-flex flex-wrap gap-3 pt-2">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="has_company_logo" id="form_has_company_logo" value="1" {% if not job_input or job_input.has_company_logo %}checked{% endif %}>
+                                                <label class="form-check-label fs-7" for="form_has_company_logo">Verified Logo</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="telecommuting" id="form_telecommuting" value="1" {% if job_input and job_input.telecommuting %}checked{% endif %}>
+                                                <label class="form-check-label fs-7" for="form_telecommuting">Remote / WFH</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" name="has_questions" id="form_has_questions" value="1" {% if not job_input or job_input.has_questions %}checked{% endif %}>
+                                                <label class="form-check-label fs-7" for="form_has_questions">Screening Questions</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex gap-2 pt-2">
+                                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 fw-semibold flex-grow-1 shadow-sm">
+                                        <i class="fa-solid fa-shield-virus me-2"></i> Run AI Analysis
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary px-3 rounded-3" onclick="resetForm('detailedScanForm')">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- TAB 2: QUICK TEXT PASTE -->
+                        <div class="tab-pane fade {% if scan_mode == 'quick' %}show active{% endif %}" id="quick-pane" role="tabpanel">
+                            <form action="{{ url_for('scan') }}" method="POST" id="quickScanForm">
+                                <input type="hidden" name="scan_mode" value="quick">
+                                
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Job Title (Optional)</label>
+                                        <input type="text" class="form-control" name="quick_title" id="quick_title" placeholder="e.g. Remote Data Entry" value="{{ job_input.title if job_input and scan_mode == 'quick' else '' }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold text-secondary fs-7">Company Name (Optional)</label>
+                                        <input type="text" class="form-control" name="quick_company" id="quick_company" placeholder="e.g. Global Tech" value="{{ job_input.company_name if job_input and scan_mode == 'quick' else '' }}">
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold text-secondary fs-7">Paste Full Listing / Email / Message <span class="text-danger">*</span></label>
+                                    <textarea class="form-control" name="raw_text" id="quick_raw_text" rows="12" placeholder="Paste the entire job post, recruitment SMS, LinkedIn message, or email here. The AI will extract and evaluate all text patterns and scam indicators..." required>{{ job_input.description if job_input and scan_mode == 'quick' else '' }}</textarea>
+                                </div>
+
+                                <div class="d-flex gap-2 pt-2">
+                                    <button type="submit" class="btn btn-primary px-4 py-2 rounded-3 fw-semibold flex-grow-1 shadow-sm">
+                                        <i class="fa-solid fa-bolt me-2"></i> Quick Scan Listing
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary px-3 rounded-3" onclick="resetForm('quickScanForm')">
+                                        <i class="fa-solid fa-rotate-left"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Output Results Column -->
+        {% if analysis %}
+        <div class="col-lg-6" id="resultsColumn">
+            <!-- Verdict Banner Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden verdict-card verdict-{{ analysis.status_color }}">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+                        <span class="badge badge-lg bg-{{ analysis.status_color }} text-white px-3 py-2 rounded-pill fs-7 fw-bold shadow-sm">
+                            <i class="fa-solid {% if analysis.is_fake %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %} me-1"></i>
+                            {{ analysis.badge_text }}
+                        </span>
+                        <div class="text-end">
+                            <small class="text-muted d-block">ML Model Confidence</small>
+                            <span class="fw-bold text-dark font-monospace fs-6">{{ analysis.ml_probability }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-4 my-3">
+                        <!-- Circular Gauge Meter -->
+                        <div class="risk-meter-wrapper position-relative">
+                            <svg class="risk-circle-svg" viewBox="0 0 100 100" width="105" height="105">
+                                <circle class="risk-circle-bg" cx="50" cy="50" r="42" fill="none" stroke="#e9ecef" stroke-width="9"/>
+                                <circle class="risk-circle-fill stroke-{{ analysis.status_color }}" cx="50" cy="50" r="42" fill="none" stroke-width="9" 
+                                    stroke-dasharray="263.89" 
+                                    stroke-dashoffset="{{ 263.89 - (263.89 * analysis.risk_percentage / 100) }}"
+                                    stroke-linecap="round"/>
+                            </svg>
+                            <div class="risk-percentage-label">
+                                <span class="fs-4 fw-extrabold">{{ analysis.risk_percentage }}%</span>
+                                <small class="text-muted d-block">RISK</small>
+                            </div>
+                        </div>
+
+                        <div class="flex-grow-1">
+                            <h3 class="fw-bold mb-1 text-dark">{{ analysis.verdict }}</h3>
+                            <p class="text-secondary small mb-0">{{ analysis.recommendation }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Action toolbar -->
+                    <div class="d-flex gap-2 pt-2 border-top mt-3">
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="copyAnalysisSummary()">
+                            <i class="fa-regular fa-copy me-1"></i> Copy Report
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-3" onclick="window.print()">
+                            <i class="fa-solid fa-print me-1"></i> Print / Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detected Red Flags Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+                <div class="card-header bg-white border-bottom p-3 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-bold text-dark">
+                        <i class="fa-solid fa-flag text-danger me-2"></i> Red Flags & Scam Indicators
+                    </h6>
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1">
+                        {{ analysis.red_flag_count }} Triggered
+                    </span>
+                </div>
+                <div class="card-body p-3">
+                    {% if analysis.red_flags %}
+                        <div class="d-flex flex-column gap-2.5">
+                            {% for flag in analysis.red_flags %}
+                            <div class="red-flag-item p-3 rounded-3 border-start border-4 border-{% if flag.severity == 'CRITICAL' %}danger{% elif flag.severity == 'HIGH' %}danger{% elif flag.severity == 'MEDIUM' %}warning{% else %}secondary{% endif %} bg-light">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-bold text-dark fs-7">{{ flag.category }}</span>
+                                    <span class="badge bg-{% if flag.severity == 'CRITICAL' or flag.severity == 'HIGH' %}danger{% elif flag.severity == 'MEDIUM' %}warning text-dark{% else %}secondary{% endif %} fs-8 px-2 py-0.5 rounded">
+                                        {{ flag.severity }}
+                                    </span>
+                                </div>
+                                <p class="text-secondary small mb-1">{{ flag.reason }}</p>
+                                {% if flag.matched_terms %}
+                                <div class="d-flex flex-wrap gap-1 mt-1">
+                                    <small class="text-muted me-1">Trigger terms:</small>
+                                    {% for term in flag.matched_terms %}
+                                    <span class="badge bg-white text-danger border font-monospace fs-8">{{ term }}</span>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-circle-check text-success fs-1 mb-2"></i>
+                            <p class="mb-0 fw-semibold text-dark">No high-risk scam indicators detected!</p>
+                            <small class="text-secondary">Standard recruitment patterns and professional language were identified.</small>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Visual Text Highlighter Card -->
+            {% if analysis.highlighted_description %}
+            <div class="card border-0 shadow-sm rounded-4 mb-4 bg-white">
+                <div class="card-header bg-white border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark">
+                        <i class="fa-solid fa-highlighter text-warning me-2"></i> Explainable AI: Highlighted Text Breakdown
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <p class="text-muted small mb-2">Hover over highlighted terms to see risk explanations:</p>
+                    <div class="highlighted-box p-3 rounded-3 bg-light border font-monospace fs-7 text-dark">
+                        {{ analysis.highlighted_description | safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Safety Checklist Card -->
+            <div class="card border-0 shadow-sm rounded-4 bg-white">
+                <div class="card-header bg-white border-bottom p-3">
+                    <h6 class="mb-0 fw-bold text-dark">
+                        <i class="fa-solid fa-list-check text-primary me-2"></i> Job Seeker Verification Checklist
+                    </h6>
+                </div>
+                <div class="card-body p-3">
+                    <ul class="list-group list-group-flush">
+                        {% for item in analysis.safety_checklist %}
+                        <li class="list-group-item px-0 py-2 d-flex align-items-center justify-content-between border-0">
+                            <span class="fs-7 text-dark">{{ item.item }}</span>
+                            {% if item.passed %}
+                            <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-2.5 py-1">
+                                <i class="fa-solid fa-check me-1"></i> Passed
+                            </span>
+                            {% else %}
+                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-2.5 py-1">
+                                <i class="fa-solid fa-xmark me-1"></i> Failed
+                            </span>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%" fill="none" role="img" aria-label="JobSafe AI Friendly Assistant Robot Avatar">
+  <defs>
+    <!-- Robot Gradients -->
+    <linearGradient id="botBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#5B21B6"/>
+    </linearGradient>
+    <linearGradient id="botFacePlate" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2E1065"/>
+      <stop offset="100%" stop-color="#1E1B4B"/>
+    </linearGradient>
+    <linearGradient id="botEyeGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A78BFA"/>
+      <stop offset="100%" stop-color="#67E8F9"/>
+    </linearGradient>
+    <linearGradient id="antennaBall" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <filter id="botGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#7C3AED" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Circular Outer Background Container -->
+  <circle cx="60" cy="60" r="56" fill="url(#botBgGrad)" filter="url(#botGlow)"/>
+  
+  <!-- Subtle Outer Rim Highlight -->
+  <circle cx="60" cy="60" r="54" stroke="#C084FC" stroke-width="2" opacity="0.6"/>
+
+  <!-- Robot Antenna -->
+  <line x1="60" y1="28" x2="60" y2="18" stroke="#DDD6FE" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="60" cy="16" r="6" fill="url(#antennaBall)"/>
+  <circle cx="60" cy="16" r="2.5" fill="#FFFFFF"/>
+  <!-- Antenna Signal Arcs -->
+  <path d="M 52 14 A 10 10 0 0 1 68 14" stroke="#EDE9FE" stroke-width="1.8" fill="none" opacity="0.8" stroke-linecap="round"/>
+
+  <!-- Robot Head / Outer Shell -->
+  <rect x="25" y="28" width="70" height="58" rx="20" fill="#FFFFFF"/>
+  <rect x="27" y="30" width="66" height="54" rx="18" fill="#FAF5FF"/>
+
+  <!-- Robot Ears / Headphone Modules -->
+  <rect x="18" y="44" width="9" height="26" rx="4.5" fill="#7C3AED"/>
+  <rect x="93" y="44" width="9" height="26" rx="4.5" fill="#7C3AED"/>
+  <circle cx="22.5" cy="57" r="2.5" fill="#DDD6FE"/>
+  <circle cx="97.5" cy="57" r="2.5" fill="#DDD6FE"/>
+
+  <!-- Dark Visor / Digital Screen Faceplate -->
+  <rect x="33" y="37" width="54" height="40" rx="14" fill="url(#botFacePlate)"/>
+
+  <!-- Friendly Glowing Cyan/Purple Digital Eyes -->
+  <ellipse cx="48" cy="54" rx="6" ry="7.5" fill="url(#botEyeGlow)"/>
+  <ellipse cx="72" cy="54" rx="6" ry="7.5" fill="url(#botEyeGlow)"/>
+  
+  <!-- Eye Sparkle Glints -->
+  <circle cx="46" cy="51" r="2" fill="#FFFFFF"/>
+  <circle cx="70" cy="51" r="2" fill="#FFFFFF"/>
+
+  <!-- Cute Digital Smile -->
+  <path d="M 54 65 Q 60 70 66 65" stroke="#67E8F9" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+
+  <!-- Rosy Blush Cheeks -->
+  <circle cx="41" cy="63" r="3.5" fill="#A855F7" opacity="0.6"/>
+  <circle cx="79" cy="63" r="3.5" fill="#A855F7" opacity="0.6"/>
+
+  <!-- Small Cyber Shield Tie / Chest Medallion -->
+  <g transform="translate(54, 91)">
+    <path d="M 6 0 L 12 3 C 12 10, 9 14, 6 16 C 3 14, 0 10, 0 3 Z" fill="#67E8F9"/>
+    <path d="M 4 8 L 5.5 9.5 L 8.5 6.5" stroke="#1E1B4B" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,124 @@
+{
+    "top_fraud_indicators": [
+        {
+            "word": "instant",
+            "score": 6.007
+        },
+        {
+            "word": "telegram",
+            "score": 4.58
+        },
+        {
+            "word": "deposit",
+            "score": 3.818
+        },
+        {
+            "word": "receive",
+            "score": 3.143
+        },
+        {
+            "word": "equipment",
+            "score": 2.52
+        },
+        {
+            "word": "guaranteed",
+            "score": 2.28
+        },
+        {
+            "word": "check",
+            "score": 2.235
+        },
+        {
+            "word": "active",
+            "score": 1.958
+        },
+        {
+            "word": "payout",
+            "score": 1.794
+        },
+        {
+            "word": "commission",
+            "score": 1.531
+        },
+        {
+            "word": "needed",
+            "score": 1.501
+        },
+        {
+            "word": "zero",
+            "score": 1.386
+        },
+        {
+            "word": "immediately",
+            "score": 1.378
+        },
+        {
+            "word": "interview",
+            "score": 1.338
+        },
+        {
+            "word": "guaranteed weekly",
+            "score": 1.243
+        },
+        {
+            "word": "800",
+            "score": 1.223
+        },
+        {
+            "word": "home",
+            "score": 1.194
+        },
+        {
+            "word": "earn",
+            "score": 1.095
+        },
+        {
+            "word": "team",
+            "score": 1.076
+        },
+        {
+            "word": "immediate",
+            "score": 1.04
+        },
+        {
+            "word": "whatsapp",
+            "score": 1.03
+        },
+        {
+            "word": "weekly",
+            "score": 1.001
+        },
+        {
+            "word": "engineering",
+            "score": 0.999
+        },
+        {
+            "word": "account",
+            "score": 0.978
+        },
+        {
+            "word": "start",
+            "score": 0.954
+        },
+        {
+            "word": "assignment",
+            "score": 0.896
+        },
+        {
+            "word": "assistant",
+            "score": 0.882
+        },
+        {
+            "word": "upfront",
+            "score": 0.877
+        },
+        {
+            "word": "hiring",
+            "score": 0.844
+        },
+        {
+            "word": "personal",
+            "score": 0.843
+        }
+    ]
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Senior Python Backend Developer",
+    "company": "TechCorp Global",
+    "verdict": "Legitimate Job Posting",
+    "risk_percentage": 27.2,
+    "red_flag_count": 1,
+    "status_color": "success",
+    "id": 2,
+    "timestamp": "2026-10-07 22:03:05"
+  },
+  {
+    "title": "Urgent Data Entry",
+    "company": "Quick Cash LLC",
+    "verdict": "Fraudulent (Fake Job)",
+    "risk_percentage": 100.0,
+    "red_flag_count": 5,
+    "status_color": "danger",
+    "id": 1,
+    "timestamp": "2026-10-07 22:03:05"
+  }
+]

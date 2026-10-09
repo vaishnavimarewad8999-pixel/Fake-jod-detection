@@ -1,0 +1,346 @@
+{% extends "base.html" %}
+
+{% block title %}About & System Architecture - JobSafe AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <div class="d-inline-flex align-items-center gap-1.5 px-3 py-1 rounded-pill mb-2 fs-8 fw-bold" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(124, 58, 237, 0.2);">
+                <i class="fa-solid fa-graduation-cap text-purple"></i> RESEARCH &amp; ARCHITECTURE &bull; v2.0
+            </div>
+            <h1 class="display-6 fw-bold text-dark mb-1 tracking-tight">
+                System Architecture &amp; Methodology
+            </h1>
+            <p class="text-secondary small mb-0">
+                Understanding the 5-step detection pipeline, machine learning formulation, and scam taxonomy powering JobSafe AI.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-saas-secondary btn-sm px-3">
+                <i class="fa-solid fa-house me-1"></i> Dashboard
+            </a>
+            <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary btn-sm px-3">
+                <i class="fa-solid fa-magnifying-glass-chart me-1"></i> Analyze Job
+            </a>
+        </div>
+    </div>
+
+    <!-- 5-Step Pipeline Walkthrough -->
+    <div class="row g-4 mb-5" id="pipelineSection">
+        <div class="col-12 text-center mb-1">
+            <span class="badge py-1 px-3 mb-2 font-monospace" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 20px;">
+                AI DETECTION PIPELINE
+            </span>
+            <h3 class="fw-bold text-dark">How JobSafe AI Works</h3>
+            <p class="text-muted small">5-stage processing sequence from raw job input to explainable risk prediction &bull; <span class="text-purple fw-bold">Click any card below to launch interactive studio</span></p>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="saas-card p-4 h-100 position-relative pipeline-step-card cursor-pointer" onclick="openPipelineStep(1)" title="Click to open Job Details form">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 44px; height: 44px; background: var(--gradient-primary);">
+                        <i class="fa-solid fa-file-import fs-5"></i>
+                    </div>
+                    <span class="font-monospace text-purple fw-bold fs-5">01</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">1. Enter Job Details</h5>
+                <p class="text-muted small mb-0 lh-base">
+                    The user inputs structured listing fields (title, company, description, requirements, benefits, emails) or pastes raw listing text into the analyzer.
+                </p>
+                <div class="mt-3 pt-2.5 border-top d-flex align-items-center justify-content-between">
+                    <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #ede9fe; color: #5b21b6; font-size: 0.72rem;">
+                        <i class="fa-solid fa-play me-1"></i> Stage 1 Form
+                    </span>
+                    <span class="text-purple fw-bold fs-8 d-flex align-items-center gap-1">
+                        Open Form <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="saas-card p-4 h-100 position-relative pipeline-step-card cursor-pointer" onclick="openPipelineStep(2)" title="Click to view Text Preprocessing">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: var(--bg-lavender); color: var(--purple-primary);">
+                        <i class="fa-solid fa-filter fs-5"></i>
+                    </div>
+                    <span class="font-monospace text-purple fw-bold fs-5">02</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">2. Text Preprocessing</h5>
+                <p class="text-muted small mb-0 lh-base">
+                    The NLP cleaning engine performs regex noise removal, URL stripping, email isolation, lowercase normalization, and whitespace sanitization.
+                </p>
+                <div class="mt-3 pt-2.5 border-top d-flex align-items-center justify-content-between">
+                    <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #ede9fe; color: #5b21b6; font-size: 0.72rem;">
+                        <i class="fa-solid fa-wand-magic-sparkles me-1"></i> NLP Cleaning
+                    </span>
+                    <span class="text-purple fw-bold fs-8 d-flex align-items-center gap-1">
+                        View Cleaning <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="saas-card p-4 h-100 position-relative pipeline-step-card cursor-pointer" onclick="openPipelineStep(3)" title="Click to run AI/ML Analysis">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 44px; height: 44px; background: var(--gradient-primary);">
+                        <i class="fa-solid fa-brain fs-5"></i>
+                    </div>
+                    <span class="font-monospace text-purple fw-bold fs-5">03</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">3. AI/ML Analysis</h5>
+                <p class="text-muted small mb-0 lh-base">
+                    High-dimensional unigrams &amp; bigrams TF-IDF vectors are extracted and evaluated by the champion <strong>Random Forest Classifier</strong> trained on 4,000 real &amp; scam postings.
+                </p>
+                <div class="mt-3 pt-2.5 border-top d-flex align-items-center justify-content-between">
+                    <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #ede9fe; color: #5b21b6; font-size: 0.72rem;">
+                        <i class="fa-solid fa-microchip me-1"></i> Random Forest
+                    </span>
+                    <span class="text-purple fw-bold fs-8 d-flex align-items-center gap-1">
+                        Run Model <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="saas-card p-4 h-100 position-relative pipeline-step-card cursor-pointer" onclick="openPipelineStep(4)" title="Click to inspect Red Flags">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; background: var(--warning-orange-bg); color: var(--warning-orange);">
+                        <i class="fa-solid fa-crosshairs fs-5"></i>
+                    </div>
+                    <span class="font-monospace text-warning fw-bold fs-5">04</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">4. Red-Flag Detection</h5>
+                <p class="text-muted small mb-0 lh-base">
+                    A deterministic rule engine searches for 8 specific scam vectors (Telegram handles, cashier checks, free webmail domains, crypto transfers) and flags exact phrase spans.
+                </p>
+                <div class="mt-3 pt-2.5 border-top d-flex align-items-center justify-content-between">
+                    <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: var(--warning-orange-bg); color: #d97706; font-size: 0.72rem;">
+                        <i class="fa-solid fa-flag me-1"></i> Heuristic Rules
+                    </span>
+                    <span class="text-warning fw-bold fs-8 d-flex align-items-center gap-1">
+                        Scan Flags <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="saas-card p-4 h-100 position-relative pipeline-step-card cursor-pointer" onclick="openPipelineStep(5)" title="Click to view Risk Prediction">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 44px; height: 44px; background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fa-solid fa-shield-halved fs-5"></i>
+                    </div>
+                    <span class="font-monospace text-success fw-bold fs-5">05</span>
+                </div>
+                <h5 class="fw-bold text-dark mb-2">5. Risk Prediction</h5>
+                <p class="text-muted small mb-0 lh-base">
+                    The hybrid risk engine outputs an animated score (0-100%) and categorizes the listing as <strong>SAFE</strong>, <strong>SUSPICIOUS</strong>, or <strong>HIGH RISK</strong> with highlighted text explanations.
+                </p>
+                <div class="mt-3 pt-2.5 border-top d-flex align-items-center justify-content-between">
+                    <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: var(--safe-green-bg); color: var(--safe-green); font-size: 0.72rem;">
+                        <i class="fa-solid fa-gauge-high me-1"></i> Gauge &amp; Verdict
+                    </span>
+                    <span class="text-success fw-bold fs-8 d-flex align-items-center gap-1">
+                        View Prediction <i class="fa-solid fa-arrow-right"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Architecture Pill Card -->
+        <div class="col-md-6 col-lg-4">
+            <div class="saas-card p-4 h-100 d-flex flex-column justify-content-between text-center pipeline-step-card cursor-pointer" onclick="openPipelineStep(1)" style="background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%); border-color: rgba(124, 58, 237, 0.25);">
+                <div>
+                    <div class="mb-2">
+                        <span class="brand-icon-wrapper" style="width: 46px; height: 46px;">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </span>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Interactive Studio</h6>
+                    <small class="text-muted mb-2 d-block">Test all 5 pipeline stages live</small>
+                    <div class="d-flex justify-content-center gap-1.5 flex-wrap mb-2">
+                        <span class="badge bg-white text-dark border fs-8 font-monospace">Scikit-Learn</span>
+                        <span class="badge bg-white text-dark border fs-8 font-monospace">Flask 3.1</span>
+                        <span class="badge bg-white text-dark border fs-8 font-monospace">Chart.js</span>
+                    </div>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-saas-primary btn-sm w-100 py-2 fw-bold" onclick="openPipelineStep(1)">
+                        <i class="fa-solid fa-rocket me-1"></i> Launch Studio Workbench
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why JobSafe AI Section -->
+    <div class="saas-card p-4 p-md-5 mb-5" style="background: linear-gradient(135deg, #ffffff 0%, #faf5ff 100%);">
+        <div class="text-center mb-4">
+            <span class="badge py-1 px-3 mb-2 font-monospace" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(124, 58, 237, 0.2); border-radius: 20px;">
+                KEY ADVANTAGES
+            </span>
+            <h3 class="fw-bold text-dark">Why JobSafe AI?</h3>
+            <p class="text-muted small max-w-md mx-auto" style="max-width: 520px;">
+                Engineered specifically to solve the limitations of generic spam filters in employment contexts.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="p-3.5 rounded-4 h-100 bg-white border shadow-sm">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white mb-3" style="width: 40px; height: 40px; background: var(--gradient-primary);">
+                        <i class="fa-solid fa-robot"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">AI-Assisted Detection</h6>
+                    <small class="text-muted lh-sm d-block">Combines high-dimensional NLP term weighting with supervised decision forests to learn subtle linguistic patterns.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="p-3.5 rounded-4 h-100 bg-white border shadow-sm">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white mb-3" style="width: 40px; height: 40px; background: var(--gradient-accent);">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Granular Risk Scoring</h6>
+                    <small class="text-muted lh-sm d-block">Outputs precise probability percentages rather than opaque binary classifications so applicants gauge nuance.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="p-3.5 rounded-4 h-100 bg-white border shadow-sm">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white mb-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, #f59e0b, #d97706);">
+                        <i class="fa-solid fa-flag"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Red-Flag Analysis</h6>
+                    <small class="text-muted lh-sm d-block">Detects specific real-world scam vectors including Telegram interviews, check cashing, and package forwarding.</small>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="p-3.5 rounded-4 h-100 bg-white border shadow-sm">
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white mb-3" style="width: 40px; height: 40px; background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <h6 class="fw-bold text-dark mb-1">Clear Explainability</h6>
+                    <small class="text-muted lh-sm d-block">Provides in-line highlighted text and a 5-point safety verification checklist for instant candidate comprehension.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Scam Archetypes -->
+    <div class="row g-4 mb-5">
+        <div class="col-12 text-center mb-1">
+            <span class="badge py-1 px-3 mb-2 font-monospace" style="background: var(--danger-red-bg); color: var(--danger-red); border: 1px solid var(--danger-red-border); border-radius: 20px;">
+                SCAM TAXONOMY
+            </span>
+            <h3 class="fw-bold text-dark">Common Employment Scam Schemes</h3>
+            <p class="text-muted small">Predatory techniques recognized and flagged by our heuristic analyzer</p>
+        </div>
+
+        <div class="col-md-6">
+            <div class="saas-card p-4 h-100 saas-flag-critical">
+                <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-money-check-dollar text-danger"></i> Advance Check Cashing / Equipment Fee
+                </h6>
+                <p class="text-muted small mb-2">
+                    <strong>Modus Operandi:</strong> The fake employer sends a counterfeit cashier's check ($2,000 - $4,000) for "home office equipment" and directs the victim to wire funds to an "approved software vendor".
+                </p>
+                <p class="text-muted small mb-0">
+                    <strong>Consequence:</strong> The check bounces days later, leaving the victim legally and financially liable for the entire withdrawn balance.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="saas-card p-4 h-100 saas-flag-high">
+                <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+                    <i class="fa-brands fa-telegram text-purple"></i> Telegram / WhatsApp Text-Only Interviews
+                </h6>
+                <p class="text-muted small mb-2">
+                    <strong>Modus Operandi:</strong> Candidates receive unsolicited messages instructing them to contact an "@hr_recruiter" username on Telegram or WhatsApp for an immediate text interview.
+                </p>
+                <p class="text-muted small mb-0">
+                    <strong>Consequence:</strong> Zero video or phone contact occurs. An immediate fake employment offer is issued to harvest SSNs and banking details.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="saas-card p-4 h-100 saas-flag-high">
+                <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-box-open text-warning"></i> Reshipping / Package Forwarding Fraud
+                </h6>
+                <p class="text-muted small mb-2">
+                    <strong>Modus Operandi:</strong> Advertised as a "Remote Package Inspector" or "Quality Assistant". The worker receives luxury goods at home and reships them internationally.
+                </p>
+                <p class="text-muted small mb-0">
+                    <strong>Consequence:</strong> Merchandise was purchased with stolen credit cards. The worker acts as an unwitting accessory to postal theft.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="saas-card p-4 h-100 saas-flag-critical">
+                <h6 class="fw-bold text-dark mb-2 d-flex align-items-center gap-2">
+                    <i class="fa-solid fa-hand-holding-dollar text-danger"></i> Money Mule &amp; Crypto Laundering
+                </h6>
+                <p class="text-muted small mb-2">
+                    <strong>Modus Operandi:</strong> Advertised as a "Payment Processing Agent". The candidate receives money into their personal account and transfers it via Western Union, Zelle, or Bitcoin ATMs.
+                </p>
+                <p class="text-muted small mb-0">
+                    <strong>Consequence:</strong> The worker is laundering funds derived from cyber fraud, exposing them to criminal prosecution.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5 Golden Safety Rules -->
+    <div class="row">
+        <div class="col-12">
+            <div class="saas-card p-4 p-md-5" style="background: linear-gradient(135deg, #faf5ff 0%, #f5f3ff 100%); border-color: rgba(124, 58, 237, 0.2);">
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fa-solid fa-shield-halved text-purple fs-3"></i>
+                    <h4 class="fw-bold text-dark mb-0">5 Golden Safety Rules for Job Seekers</h4>
+                </div>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div class="p-3 rounded-3 bg-white border h-100 shadow-sm">
+                            <span class="text-purple fw-bold small d-block mb-1">RULE 01</span>
+                            <div class="text-dark fw-bold mb-1">Never Send Money to Work</div>
+                            <small class="text-muted">Legitimate employers never demand onboarding fees, software licensing charges, or equipment purchases.</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded-3 bg-white border h-100 shadow-sm">
+                            <span class="text-purple fw-bold small d-block mb-1">RULE 02</span>
+                            <div class="text-dark fw-bold mb-1">Verify Recruiter Email Domains</div>
+                            <small class="text-muted">Corporate recruiters contact candidates from enterprise domains (e.g. name@company.com), not free webmail (@gmail.com).</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 rounded-3 bg-white border h-100 shadow-sm">
+                            <span class="text-purple fw-bold small d-block mb-1">RULE 03</span>
+                            <div class="text-dark fw-bold mb-1">Demand Synchronous Interviews</div>
+                            <small class="text-muted">If an organization hires you exclusively via text messaging on Telegram without video or phone contact, it is deceptive.</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

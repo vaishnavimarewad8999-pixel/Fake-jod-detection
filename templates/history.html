@@ -1,0 +1,483 @@
+{% extends "base.html" %}
+
+{% block title %}Audit History - JobSafe AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Header Section -->
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <div class="d-inline-flex align-items-center gap-1.5 px-3 py-1 rounded-pill mb-2 fs-8 fw-bold" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(124, 58, 237, 0.2);">
+                <i class="fa-solid fa-clock-rotate-left text-purple"></i> VERIFICATION LOG &bull; v2.0
+            </div>
+            <h1 class="display-6 fw-bold text-dark mb-1 tracking-tight">
+                Audit &amp; Scan History
+            </h1>
+            <p class="text-secondary small mb-0">
+                Persistent audit trail of previously analyzed job opportunities and risk classifications.
+            </p>
+        </div>
+
+        <div class="d-flex gap-2 align-items-center" id="historyHeaderActions">
+            {% if history %}
+            <button type="button" class="btn btn-saas-secondary btn-sm px-3 text-danger border-danger" id="clearAllBtn" onclick="clearAllHistory()">
+                <i class="fa-regular fa-trash-can me-1"></i> Clear All History
+            </button>
+            {% endif %}
+            <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary btn-sm px-3">
+                <i class="fa-solid fa-plus me-1"></i> New Analysis
+            </a>
+        </div>
+    </div>
+
+    <!-- Alert / Toast Container -->
+    <div id="historyAlertPlaceholder"></div>
+
+    <!-- Filter & Search Controls Bar -->
+    <div id="historyControlsSection" {% if not history %}style="display: none;"{% endif %}>
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+            <div class="d-flex flex-wrap gap-2" id="filterPillsContainer">
+                <button type="button" class="preset-pill active" data-criteria="all" onclick="setFilterCriteria('all', this)">
+                    All Analyses (<span id="allCountBadge">{{ history | length }}</span>)
+                </button>
+                <button type="button" class="preset-pill" data-criteria="job_description" onclick="setFilterCriteria('job_description', this)">
+                    <i class="fa-solid fa-briefcase"></i> Job Postings
+                </button>
+                <button type="button" class="preset-pill" data-criteria="offer_letter" onclick="setFilterCriteria('offer_letter', this)">
+                    <i class="fa-solid fa-file-shield"></i> Offer Letters
+                </button>
+                <button type="button" class="preset-pill preset-pill-safe" data-criteria="success" onclick="setFilterCriteria('success', this)">
+                    <i class="fa-solid fa-circle-check"></i> Safe / Genuine
+                </button>
+                <button type="button" class="preset-pill" style="border-color: var(--warning-orange-border); color: #d97706;" data-criteria="warning" onclick="setFilterCriteria('warning', this)">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Suspicious
+                </button>
+                <button type="button" class="preset-pill preset-pill-fake" data-criteria="danger" onclick="setFilterCriteria('danger', this)">
+                    <i class="fa-solid fa-radiation"></i> High Risk Fraud
+                </button>
+            </div>
+
+            <!-- Instant Live Search Input -->
+            <div class="input-group input-group-sm" style="max-width: 290px;">
+                <span class="input-group-text bg-white border-end-0 text-muted" style="border-color: rgba(124, 58, 237, 0.25);">
+                    <i class="fa-solid fa-magnifying-glass text-purple"></i>
+                </span>
+                <input type="text" id="historySearchInput" class="form-control border-start-0 border-end-0 ps-0" placeholder="Search title, company, status..." oninput="onSearchInput(this.value)" style="border-color: rgba(124, 58, 237, 0.25);">
+                <button class="btn btn-outline-secondary border-start-0" type="button" id="clearSearchBtn" onclick="clearSearch()" style="display: none; border-color: rgba(124, 58, 237, 0.25);">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Table Container -->
+    <div class="saas-card p-0 overflow-hidden" id="historyTableContainer">
+        {% if history %}
+        <div class="table-responsive" id="tableWrapper">
+            <table class="table table-saas w-100 mb-0" id="historyTable">
+                <thead>
+                    <tr>
+                        <th class="ps-4">#</th>
+                        <th>Date &amp; Time</th>
+                        <th>Type</th>
+                        <th>Document / Job Title</th>
+                        <th>Source / Company</th>
+                        <th>Risk Score</th>
+                        <th>Prediction Status</th>
+                        <th>Red Flags</th>
+                        <th class="pe-4 text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    {% for item in history %}
+                    {% set stype = item.scan_type or 'job_description' %}
+                    <tr class="history-row history-type-{{ item.status_color }}" id="history-row-{{ item.id }}" data-status="{{ item.status_color }}" data-scan-type="{{ stype }}">
+                        <td class="ps-4 font-monospace text-muted">{{ item.id }}</td>
+                        <td class="font-monospace small text-muted">{{ item.timestamp }}</td>
+                        <td>
+                            {% if stype == 'offer_letter' %}
+                            <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #ede9fe; color: #6c2bd9; font-size: 0.72rem;">
+                                <i class="fa-solid fa-file-shield me-1"></i> Offer Letter
+                            </span>
+                            {% else %}
+                            <span class="badge py-1 px-2 rounded-pill font-monospace" style="background: #f1f5f9; color: #475569; font-size: 0.72rem;">
+                                <i class="fa-solid fa-briefcase me-1"></i> Job Posting
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="fw-bold text-dark">{{ item.title }}</td>
+                        <td class="text-secondary">{{ item.company or 'Unspecified' }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2" style="min-width: 110px;">
+                                <div class="progress flex-grow-1" style="height: 6px; background: #ede9fe;">
+                                    <div class="progress-bar bg-{{ item.status_color }}" role="progressbar" style="width: {{ item.risk_percentage }}%"></div>
+                                </div>
+                                <span class="font-monospace fw-bold text-{{ item.status_color }} small">{{ item.risk_percentage }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="status-pill-lg status-pill-{{ item.status_color }} py-1 px-2.5 fs-8">
+                                <i class="fa-solid {% if item.status_color == 'danger' %}fa-triangle-exclamation{% elif item.status_color == 'warning' %}fa-circle-exclamation{% else %}fa-circle-check{% endif %} me-1"></i>
+                                {{ item.verdict }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if item.red_flag_count > 0 %}
+                            <span class="badge py-1 px-2 font-monospace" style="background: var(--danger-red-bg); color: var(--danger-red); border: 1px solid var(--danger-red-border); border-radius: 20px;">
+                                {{ item.red_flag_count }} Triggered
+                            </span>
+                            {% else %}
+                            <span class="badge py-1 px-2" style="background: var(--safe-green-bg); color: var(--safe-green); border: 1px solid var(--safe-green-border); border-radius: 20px;">
+                                0 Flags
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="pe-4 text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center gap-1.5">
+                                <button type="button" class="btn btn-saas-secondary btn-sm px-2.5 py-1 fs-8" onclick="viewHistoryDetail('{{ item.title | escape }}', '{{ item.company | escape }}', '{{ item.verdict | escape }}', '{{ item.risk_percentage }}', '{{ item.timestamp }}', '{{ item.red_flag_count }}', '{{ item.status_color }}', '{{ stype }}')" title="View detailed analysis snapshot">
+                                    <i class="fa-solid fa-eye me-1"></i> View Details
+                                </button>
+                                <button type="button" class="btn btn-outline-danger btn-sm px-2.5 py-1 fs-8 delete-record-btn" id="delete-btn-{{ item.id }}" onclick="deleteHistoryItem({{ item.id }})" title="Delete this record permanently">
+                                    <i class="fa-regular fa-trash-can me-1"></i> Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Notice shown when search/filter returns 0 matching rows -->
+            <div id="noSearchResultsNotice" class="text-center py-4 text-muted small" style="display: none;">
+                <i class="fa-solid fa-magnifying-glass me-1"></i> No records match your current search or filter criteria.
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Empty State (Shown initially if no records, or dynamically when all are deleted) -->
+        <div id="emptyStateContainer" class="text-center py-5 px-3" {% if history %}style="display: none;"{% endif %}>
+            <div class="mb-3 text-purple opacity-40 fs-1">
+                <i class="fa-solid fa-radar fa-beat-fade"></i>
+            </div>
+            <h5 class="fw-bold text-dark mb-2">No Verification Records Found</h5>
+            <p class="text-muted small max-w-md mx-auto mb-4" style="max-width: 420px;">
+                Your analysis history log is currently empty. Run your first job description scan or verify an offer letter using our AI engine to see verification records here.
+            </p>
+            <div class="d-flex justify-content-center gap-2">
+                <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary px-4 py-2">
+                    <i class="fa-solid fa-wand-magic-sparkles me-2"></i> Launch Job Scanner
+                </a>
+                <a href="{{ url_for('offer_letter') }}" class="btn btn-saas-secondary px-3 py-2">
+                    <i class="fa-solid fa-file-shield me-2 text-purple"></i> Verify Offer Letter
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal: History Item Details Snapshot -->
+<div class="modal fade" id="historyDetailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content saas-modal p-2">
+            <div class="modal-header border-bottom py-3">
+                <h6 class="modal-title fw-bold text-dark d-flex align-items-center gap-2" id="detailModalLabel">
+                    <i class="fa-solid fa-file-shield text-purple"></i> Verification Audit Snapshot
+                </h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div id="modalStatusBadge" class="status-pill-lg">
+                        STATUS
+                    </div>
+                    <span id="modalTimestamp" class="font-monospace small text-muted">TIME</span>
+                </div>
+
+                <div class="p-3 rounded-3 mb-3" style="background: var(--bg-lavender); border: 1px solid rgba(124, 58, 237, 0.15);">
+                    <div class="text-muted small">Job Title / Document</div>
+                    <h5 id="modalJobTitle" class="fw-bold text-dark mb-2">Title</h5>
+                    <div class="text-muted small">Company Organization</div>
+                    <div id="modalCompany" class="text-secondary fw-semibold">Company</div>
+                </div>
+
+                <div class="row g-2 text-center mb-3">
+                    <div class="col-6">
+                        <div class="p-3 rounded-3 border" style="background: #ffffff;">
+                            <span class="text-muted small d-block">Risk Percentage</span>
+                            <span id="modalRiskScore" class="font-monospace fw-bold fs-4 text-dark">0%</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-3 rounded-3 border" style="background: #ffffff;">
+                            <span class="text-muted small d-block">Red Flags</span>
+                            <span id="modalFlagsCount" class="font-monospace fw-bold fs-4 text-danger">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="small text-muted text-center">
+                    <i class="fa-solid fa-shield-halved text-purple me-1"></i>
+                    Audit verified via JobSafe AI Random Forest Classifier &amp; Heuristics Engine.
+                </div>
+            </div>
+            <div class="modal-footer border-top py-2">
+                <button type="button" class="btn btn-saas-secondary btn-sm px-3" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+    // State for filtering and searching
+    let currentFilterCriteria = "all";
+    let currentSearchTerm = "";
+
+    // 1. Delete Single History Item
+    function deleteHistoryItem(id) {
+        // Confirmation dialog required
+        if (!confirm("Are you sure you want to delete this record?")) {
+            return; // User canceled: keep record unchanged
+        }
+
+        const row = document.getElementById("history-row-" + id);
+        const delBtn = document.getElementById("delete-btn-" + id);
+
+        if (delBtn) {
+            delBtn.disabled = true;
+            delBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Deleting...';
+        }
+
+        fetch("/history/delete/" + id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "Accept": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errData => {
+                    throw new Error(errData.message || "Failed to delete record.");
+                }).catch(e => {
+                    throw new Error(e.message || "Server returned an error (" + response.status + ")");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            showHistoryAlert("success", data.message || `Record #${id} permanently deleted.`);
+
+            // Smooth fade out and removal
+            if (row) {
+                row.style.transition = "all 0.25s ease-out";
+                row.style.opacity = "0";
+                row.style.transform = "translateX(20px)";
+                setTimeout(() => {
+                    row.remove();
+                    updateHistoryUI();
+                }, 250);
+            } else {
+                updateHistoryUI();
+            }
+        })
+        .catch(error => {
+            showHistoryAlert("danger", error.message || "An error occurred while deleting the record.");
+            if (delBtn) {
+                delBtn.disabled = false;
+                delBtn.innerHTML = '<i class="fa-regular fa-trash-can me-1"></i> Delete';
+            }
+        });
+    }
+
+    // 2. Clear All History
+    function clearAllHistory() {
+        if (!confirm("Are you sure you want to delete all history records?")) {
+            return; // User canceled
+        }
+
+        const clearBtn = document.getElementById("clearAllBtn");
+        if (clearBtn) {
+            clearBtn.disabled = true;
+            clearBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Clearing...';
+        }
+
+        fetch("/history/clear", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "Accept": "application/json"
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(errData => {
+                    throw new Error(errData.message || "Failed to clear history.");
+                }).catch(e => {
+                    throw new Error(e.message || "Server error (" + response.status + ")");
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            showHistoryAlert("success", data.message || "All history records permanently deleted.");
+
+            // Remove all rows
+            const rows = document.querySelectorAll(".history-row");
+            rows.forEach(r => r.remove());
+            updateHistoryUI();
+        })
+        .catch(error => {
+            showHistoryAlert("danger", error.message || "An error occurred while clearing history.");
+            if (clearBtn) {
+                clearBtn.disabled = false;
+                clearBtn.innerHTML = '<i class="fa-regular fa-trash-can me-1"></i> Clear All History';
+            }
+        });
+    }
+
+    // 3. UI Synchronization after deletion
+    function updateHistoryUI() {
+        const remainingRows = document.querySelectorAll(".history-row");
+        const count = remainingRows.length;
+
+        // Update count badge in All Analyses button
+        const badge = document.getElementById("allCountBadge");
+        if (badge) badge.textContent = count;
+
+        if (count === 0) {
+            // Hide table wrapper and controls
+            const tableWrapper = document.getElementById("tableWrapper");
+            if (tableWrapper) tableWrapper.style.display = "none";
+
+            const controls = document.getElementById("historyControlsSection");
+            if (controls) controls.style.display = "none";
+
+            const clearBtn = document.getElementById("clearAllBtn");
+            if (clearBtn) clearBtn.remove();
+
+            // Display empty state
+            const emptyState = document.getElementById("emptyStateContainer");
+            if (emptyState) emptyState.style.display = "block";
+        } else {
+            applyHistoryFilters();
+        }
+    }
+
+    // 4. Alert Notification Banner
+    function showHistoryAlert(type, message) {
+        const placeholder = document.getElementById("historyAlertPlaceholder");
+        if (!placeholder) return;
+
+        const icon = type === "success" ? "fa-circle-check" : "fa-circle-exclamation";
+        placeholder.innerHTML = `
+            <div class="alert alert-${type} alert-dismissible fade show d-flex align-items-center gap-2 mb-3 shadow-sm" role="alert" style="border-radius: 10px;">
+                <i class="fa-solid ${icon} fs-5"></i>
+                <div class="fw-medium">${message}</div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+
+        // Auto dismiss after 4.5 seconds
+        setTimeout(() => {
+            const alertEl = placeholder.querySelector(".alert");
+            if (alertEl && window.bootstrap && bootstrap.Alert) {
+                try {
+                    const bsAlert = bootstrap.Alert.getOrCreateInstance(alertEl);
+                    bsAlert.close();
+                } catch (e) {
+                    alertEl.remove();
+                }
+            }
+        }, 4500);
+    }
+
+    // 5. Filter & Search Handlers
+    function setFilterCriteria(criteria, btn) {
+        currentFilterCriteria = criteria;
+        document.querySelectorAll(".preset-pill").forEach(p => p.classList.remove("active"));
+        if (btn) btn.classList.add("active");
+        applyHistoryFilters();
+    }
+
+    // Backwards compatibility for filterHistory calls
+    function filterHistory(criteria, btn) {
+        setFilterCriteria(criteria, btn);
+    }
+
+    function onSearchInput(val) {
+        currentSearchTerm = (val || "").trim().toLowerCase();
+        const clearBtn = document.getElementById("clearSearchBtn");
+        if (clearBtn) {
+            clearBtn.style.display = currentSearchTerm ? "block" : "none";
+        }
+        applyHistoryFilters();
+    }
+
+    function clearSearch() {
+        const input = document.getElementById("historySearchInput");
+        if (input) input.value = "";
+        onSearchInput("");
+    }
+
+    function applyHistoryFilters() {
+        const rows = document.querySelectorAll(".history-row");
+        let visibleCount = 0;
+
+        rows.forEach(row => {
+            const status = row.getAttribute("data-status");
+            const scanType = row.getAttribute("data-scan-type");
+            const rowText = row.textContent.toLowerCase();
+
+            // Match active filter criteria
+            let matchesFilter = false;
+            if (currentFilterCriteria === "all") {
+                matchesFilter = true;
+            } else if (currentFilterCriteria === "job_description" || currentFilterCriteria === "offer_letter") {
+                matchesFilter = (scanType === currentFilterCriteria);
+            } else {
+                matchesFilter = (status === currentFilterCriteria);
+            }
+
+            // Match search query
+            let matchesSearch = true;
+            if (currentSearchTerm) {
+                matchesSearch = rowText.includes(currentSearchTerm);
+            }
+
+            if (matchesFilter && matchesSearch) {
+                row.style.display = "";
+                visibleCount++;
+            } else {
+                row.style.display = "none";
+            }
+        });
+
+        const noResults = document.getElementById("noSearchResultsNotice");
+        if (noResults) {
+            noResults.style.display = (visibleCount === 0 && rows.length > 0) ? "block" : "none";
+        }
+    }
+
+    // 6. View Details Snapshot Modal
+    function viewHistoryDetail(title, company, verdict, risk, time, flags, color, scanType) {
+        document.getElementById("modalJobTitle").textContent = title;
+        document.getElementById("modalCompany").textContent = company;
+        document.getElementById("modalRiskScore").textContent = risk + "%";
+        document.getElementById("modalFlagsCount").textContent = flags;
+        document.getElementById("modalTimestamp").textContent = time;
+
+        const badge = document.getElementById("modalStatusBadge");
+        badge.className = `status-pill-lg status-pill-${color}`;
+        badge.innerHTML = `<i class="fa-solid fa-circle-check me-1"></i> ${verdict}`;
+
+        const modal = new bootstrap.Modal(document.getElementById('historyDetailModal'));
+        modal.show();
+    }
+</script>
+{% endblock %}

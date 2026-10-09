@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 360" width="100%" height="100%" fill="none" role="img" aria-label="JobSafe AI Model Analytics and Risk Analysis Illustration">
+  <defs>
+    <!-- Purple Gradients -->
+    <linearGradient id="anBgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EDE9FE" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#F5F3FF" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FAF5FF"/>
+    </linearGradient>
+    <linearGradient id="barGrad1" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#5B21B6"/>
+      <stop offset="100%" stop-color="#8B5CF6"/>
+    </linearGradient>
+    <linearGradient id="barGrad2" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#6D28D9"/>
+      <stop offset="100%" stop-color="#A855F7"/>
+    </linearGradient>
+    <linearGradient id="barGrad3" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#7C3AED"/>
+      <stop offset="100%" stop-color="#C084FC"/>
+    </linearGradient>
+    <linearGradient id="trendCurve" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="50%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#34D399"/>
+    </linearGradient>
+    <linearGradient id="gaugeArc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#6D28D9"/>
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="cardShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="15" flood-color="#4C1D95" flood-opacity="0.12"/>
+    </filter>
+    <filter id="nodeGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#8B5CF6" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Ambient Backdrop Glow -->
+  <circle cx="230" cy="180" r="145" fill="url(#anBgGlow)"/>
+
+  <!-- Neural Interconnect Background Grid -->
+  <g stroke="#C4B5FD" stroke-width="1.5" stroke-dasharray="4,4" fill="none" opacity="0.65">
+    <path d="M 60 100 L 140 100 L 170 60"/>
+    <path d="M 50 250 L 110 250 L 140 300"/>
+    <path d="M 400 90 L 340 90 L 310 130"/>
+    <path d="M 420 270 L 360 270 L 320 230"/>
+  </g>
+  <g fill="#7C3AED">
+    <circle cx="60" cy="100" r="4"/>
+    <circle cx="50" cy="250" r="4"/>
+    <circle cx="400" cy="90" r="4"/>
+    <circle cx="420" cy="270" r="4"/>
+  </g>
+
+  <!-- Primary Analytics Card -->
+  <g filter="url(#cardShadow)" transform="translate(60, 50)">
+    <rect width="340" height="250" rx="18" fill="url(#cardGrad)" stroke="#E9D5FF" stroke-width="1.8"/>
+
+    <!-- Dashboard Header Bar -->
+    <rect x="0" y="0" width="340" height="48" rx="18" fill="#F3E8FF"/>
+    <path d="M 0 32 L 340 32 L 340 48 L 0 48 Z" fill="#F3E8FF"/>
+
+    <circle cx="24" cy="24" r="5" fill="#EF4444"/>
+    <circle cx="38" cy="24" r="5" fill="#F59E0B"/>
+    <circle cx="52" cy="24" r="5" fill="#10B981"/>
+
+    <text x="75" y="28" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#4C1D95">
+      AI PERFORMANCE BENCHMARK MATRIX
+    </text>
+
+    <!-- Card Interior Grid: Left Bar Chart, Right Gauge & Trend -->
+    
+    <!-- Left: Model Metrics Bar Chart -->
+    <g transform="translate(25, 70)">
+      <!-- Chart Axis -->
+      <line x1="0" y1="130" x2="160" y2="130" stroke="#CBD5E1" stroke-width="1.5"/>
+      <line x1="0" y1="0" x2="0" y2="130" stroke="#CBD5E1" stroke-width="1.5"/>
+      
+      <!-- Grid Lines -->
+      <line x1="0" y1="35" x2="160" y2="35" stroke="#F1F5F9" stroke-width="1"/>
+      <line x1="0" y1="70" x2="160" y2="70" stroke="#F1F5F9" stroke-width="1"/>
+      <line x1="0" y1="100" x2="160" y2="100" stroke="#F1F5F9" stroke-width="1"/>
+
+      <!-- Bar 1 (Random Forest - 100%) -->
+      <rect x="15" y="15" width="24" height="115" rx="6" fill="url(#barGrad1)"/>
+      <text x="27" y="9" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="800" fill="#6D28D9" text-anchor="middle">RF</text>
+
+      <!-- Bar 2 (Logistic Regression - 98%) -->
+      <rect x="52" y="28" width="24" height="102" rx="6" fill="url(#barGrad2)"/>
+      <text x="64" y="22" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="800" fill="#8B5CF6" text-anchor="middle">LR</text>
+
+      <!-- Bar 3 (Naive Bayes - 95%) -->
+      <rect x="89" y="42" width="24" height="88" rx="6" fill="url(#barGrad3)"/>
+      <text x="101" y="36" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="800" fill="#A855F7" text-anchor="middle">NB</text>
+
+      <!-- Bar 4 (Neural/TF-IDF) -->
+      <rect x="126" y="20" width="24" height="110" rx="6" fill="url(#barGrad1)"/>
+      <text x="138" y="14" font-family="'JetBrains Mono', monospace" font-size="8.5" font-weight="800" fill="#6D28D9" text-anchor="middle">NLP</text>
+    </g>
+
+    <!-- Right: Circular Risk Score Gauge -->
+    <g transform="translate(245, 125)">
+      <!-- Outer Track Arc -->
+      <circle cx="35" cy="35" r="42" stroke="#EDE9FE" stroke-width="8" fill="none"/>
+      <!-- Gauge Indicator Arc (Progress) -->
+      <circle cx="35" cy="35" r="42" stroke="url(#gaugeArc)" stroke-width="8" fill="none"
+              stroke-dasharray="264" stroke-dashoffset="65" stroke-linecap="round"
+              transform="rotate(-90 35 35)"/>
+      <text x="35" y="34" font-family="'JetBrains Mono', monospace" font-size="16" font-weight="800" fill="#1F1633" text-anchor="middle">
+        100%
+      </text>
+      <text x="35" y="48" font-family="'Plus Jakarta Sans', sans-serif" font-size="8.5" font-weight="700" fill="#6D28D9" text-anchor="middle">
+        ACCURACY
+      </text>
+    </g>
+
+    <!-- Upward Trend Line Overlay Across Card -->
+    <path d="M 40 185 C 90 170, 140 130, 200 110 S 260 90, 310 75" 
+          stroke="url(#trendCurve)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    
+    <!-- Pulse Node on Trend Peak -->
+    <circle cx="310" cy="75" r="5" fill="#10B981"/>
+    <circle cx="310" cy="75" r="10" stroke="#10B981" stroke-width="1.5" fill="none" opacity="0.6"/>
+  </g>
+
+  <!-- Floating Metric Pill (Top Left) -->
+  <g filter="url(#nodeGlow)" transform="translate(30, 30)">
+    <rect width="130" height="34" rx="17" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1.5"/>
+    <circle cx="18" cy="17" r="8" fill="#7C3AED"/>
+    <path d="M 14 17 L 17 20 L 22 14" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="32" y="21" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#4C1D95">
+      ROC-AUC 100%
+    </text>
+  </g>
+
+  <!-- Floating Data Node (Bottom Right) -->
+  <g filter="url(#nodeGlow)" transform="translate(305, 275)">
+    <rect width="125" height="34" rx="17" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1.5"/>
+    <circle cx="18" cy="17" r="8" fill="#10B981"/>
+    <text x="18" y="21" font-family="'JetBrains Mono', monospace" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">N</text>
+    <text x="32" y="21" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="700" fill="#1F1633">
+      4,000 TRAINED
+    </text>
+  </g>
+</svg>

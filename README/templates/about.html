@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}About & Fraud Awareness - JobShield AI{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-5">
+        <div class="col-lg-8 mx-auto text-center">
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1 mb-2">
+                <i class="fa-solid fa-graduation-cap me-1"></i> Research & Safety Guide
+            </span>
+            <h1 class="display-6 fw-bold text-dark">System Architecture & Fraud Taxonomy</h1>
+            <p class="text-secondary fs-6">
+                Understand how machine learning detects fraudulent employment listings, and learn to spot predatory schemes before falling victim.
+            </p>
+        </div>
+    </div>
+
+    <!-- Section 1: AI & ML Methodology -->
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-microchip text-primary me-2"></i> How the AI Detection Pipeline Works</h4>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <div class="feature-icon mb-3 text-primary fs-3">
+                    <i class="fa-solid fa-spell-check"></i>
+                </div>
+                <h5 class="fw-bold text-dark">1. NLP & TF-IDF Extraction</h5>
+                <p class="text-secondary fs-7 mb-0">
+                    The raw text is tokenized, stripped of noise, and transformed into high-dimensional n-gram feature vectors (unigrams and bigrams) with sublinear term-frequency scaling.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <div class="feature-icon mb-3 text-success fs-3">
+                    <i class="fa-solid fa-tree"></i>
+                </div>
+                <h5 class="fw-bold text-dark">2. Supervised Ensemble Classifiers</h5>
+                <p class="text-secondary fs-7 mb-0">
+                    A Random Forest Classifier and Logistic Regression ensemble evaluate the probabilistic likelihood of fraud based on textual patterns combined with metadata signals (logo presence, screening questions, company profiles).
+                </p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100">
+                <div class="feature-icon mb-3 text-warning fs-3">
+                    <i class="fa-solid fa-lightbulb"></i>
+                </div>
+                <h5 class="fw-bold text-dark">3. Explainable AI Heuristics</h5>
+                <p class="text-secondary fs-7 mb-0">
+                    A deterministic rule-augmentation engine identifies specific predatory tactics (e.g., Telegram recruiter tags, cashier's checks, crypto wires) and highlights exact phrases for user explainability.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Common Employment Scams Explained -->
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <h4 class="fw-bold text-dark mb-3"><i class="fa-solid fa-triangle-exclamation text-danger me-2"></i> Common Job Scam Schemes</h4>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-4 border-danger">
+                <h5 class="fw-bold text-dark mb-2"><i class="fa-solid fa-money-check-dollar text-danger me-2"></i> The Advance Fee / Check Cashing Scam</h5>
+                <p class="text-secondary fs-7">
+                    <strong>Mechanism:</strong> The 'employer' sends the victim a cashier's check or digital check for $2,000 to $4,000 to buy home-office equipment or software licenses from their 'approved vendor'.
+                </p>
+                <p class="text-secondary fs-7 mb-0">
+                    <strong>The Catch:</strong> The vendor is the scammer. After the victim deposits the check and wires money to the vendor, the original check bounces days later. The victim is held legally and financially responsible by their bank.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-4 border-danger">
+                <h5 class="fw-bold text-dark mb-2"><i class="fa-solid fa-box-open text-danger me-2"></i> Reshipping / Package Forwarding Scam</h5>
+                <p class="text-secondary fs-7">
+                    <strong>Mechanism:</strong> Advertised as a 'Package Inspector' or 'Shipping Assistant'. The candidate receives luxury items, electronics, or designer clothing at their home and forwards them overseas.
+                </p>
+                <p class="text-secondary fs-7 mb-0">
+                    <strong>The Catch:</strong> The packages were purchased with stolen credit cards. The victim acts as an unwitting accomplice to postal fraud and receives zero payment.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-4 border-warning">
+                <h5 class="fw-bold text-dark mb-2"><i class="fa-brands fa-telegram text-primary me-2"></i> The Telegram / WhatsApp Text Interview Scam</h5>
+                <p class="text-secondary fs-7">
+                    <strong>Mechanism:</strong> Candidates are contacted via SMS or email claiming their resume was approved and directed to text a recruiter on Telegram, WhatsApp, or Google Chat.
+                </p>
+                <p class="text-secondary fs-7 mb-0">
+                    <strong>The Catch:</strong> No video or voice interview ever occurs. After a few questionnaire questions, an immediate fake offer letter is sent to harvest social security numbers and banking details.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-white h-100 border-start border-4 border-warning">
+                <h5 class="fw-bold text-dark mb-2"><i class="fa-solid fa-hand-holding-dollar text-warning me-2"></i> The Money Mule / Crypto Processing Scam</h5>
+                <p class="text-secondary fs-7">
+                    <strong>Mechanism:</strong> The role is titled 'Payment Processing Agent'. The worker receives deposits into their personal bank account and transfers funds via Western Union, MoneyGram, or Bitcoin ATM.
+                </p>
+                <p class="text-secondary fs-7 mb-0">
+                    <strong>The Catch:</strong> The worker is laundering money from ransomware attacks or identity theft victims, subjecting themselves to severe federal criminal charges.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Essential Golden Rules -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm rounded-4 p-4 bg-primary text-white">
+                <h4 class="fw-bold mb-3"><i class="fa-solid fa-shield-halved me-2"></i> 5 Golden Rules for Job Seekers</h4>
+                <div class="row g-3 fs-7">
+                    <div class="col-md-4">
+                        <div class="p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                            <strong>1. Never Send Money to Work</strong>
+                            <p class="mb-0 mt-1 opacity-75">Legitimate employers pay you; you never pay them for onboarding, training, background checks, or equipment.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                            <strong>2. Check Domain Email Addresses</strong>
+                            <p class="mb-0 mt-1 opacity-75">Corporate recruiters email from corporate domains (e.g., @microsoft.com), not free webmail (@gmail.com or @yahoo.com).</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="p-3 bg-white bg-opacity-10 rounded-3 h-100">
+                            <strong>3. Demand a Real Interview</strong>
+                            <p class="mb-0 mt-1 opacity-75">If the company hires you exclusively over text chat without a video or phone conference, it is almost certainly fraudulent.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

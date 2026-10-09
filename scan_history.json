@@ -1,0 +1,173 @@
+[
+  {
+    "scan_type": "job_description",
+    "title": "Congratulations! You are selected for a high-payin",
+    "company": "Verified via Description",
+    "verdict": "Fraudulent (Fake Job)",
+    "risk_percentage": 85.0,
+    "red_flag_count": 1,
+    "status_color": "danger",
+    "id": 15,
+    "timestamp": "2026-10-09 22:31:35"
+  },
+  {
+    "scan_type": "offer_letter",
+    "title": "Offer Letter: my_offer.png",
+    "filename": "my_offer.png",
+    "company": "Analyzed from Document",
+    "verdict": "Suspicious",
+    "risk_percentage": 45.0,
+    "red_flag_count": 0,
+    "status_color": "warning",
+    "id": 14,
+    "timestamp": "2026-10-09 22:27:37"
+  },
+  {
+    "scan_type": "offer_letter",
+    "title": "Global Tech - Remote Data Entry Appointment Letter",
+    "filename": "GlobalTech_Executive_Offer_Letter.pdf",
+    "company": "Analyzed from Document",
+    "verdict": "High Risk",
+    "risk_percentage": 100.0,
+    "red_flag_count": 6,
+    "status_color": "danger",
+    "id": 13,
+    "timestamp": "2026-10-09 22:27:32"
+  },
+  {
+    "scan_type": "offer_letter",
+    "title": "Google LLC - Formal Employment Offer",
+    "filename": "Google_Employment_Offer_Official.pdf",
+    "company": "Analyzed from Document",
+    "verdict": "Likely Genuine",
+    "risk_percentage": 8.0,
+    "red_flag_count": 0,
+    "status_color": "success",
+    "id": 12,
+    "timestamp": "2026-10-09 22:27:32"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Senior Python Backend Developer",
+    "company": "TechCorp Global",
+    "verdict": "Legitimate Job Posting",
+    "risk_percentage": 4.0,
+    "red_flag_count": 0,
+    "status_color": "success",
+    "id": 11,
+    "timestamp": "2026-10-09 22:27:32"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Urgent Data Entry",
+    "company": "Quick Cash LLC",
+    "verdict": "Fraudulent (Fake Job)",
+    "risk_percentage": 94.0,
+    "red_flag_count": 3,
+    "status_color": "danger",
+    "id": 10,
+    "timestamp": "2026-10-09 22:27:31"
+  },
+  {
+    "scan_type": "offer_letter",
+    "title": "Offer Letter: my_offer.png",
+    "filename": "my_offer.png",
+    "company": "Analyzed from Document",
+    "verdict": "Suspicious",
+    "risk_percentage": 45.0,
+    "red_flag_count": 0,
+    "status_color": "warning",
+    "id": 9,
+    "timestamp": "2026-10-09 22:26:59"
+  },
+  {
+    "scan_type": "offer_letter",
+    "title": "Global Tech - Remote Data Entry Appointment Letter",
+    "filename": "GlobalTech_Executive_Offer_Letter.pdf",
+    "company": "Analyzed from Document",
+    "verdict": "High Risk",
+    "risk_percentage": 100.0,
+    "red_flag_count": 6,
+    "status_color": "danger",
+    "id": 8,
+    "timestamp": "2026-10-09 22:26:57"
+  },
+  {
+    "scan_type": "offer_letter",
+    "title": "Google LLC - Formal Employment Offer",
+    "filename": "Google_Employment_Offer_Official.pdf",
+    "company": "Analyzed from Document",
+    "verdict": "Likely Genuine",
+    "risk_percentage": 8.0,
+    "red_flag_count": 0,
+    "status_color": "success",
+    "id": 7,
+    "timestamp": "2026-10-09 22:26:57"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Senior Python Backend Developer",
+    "company": "TechCorp Global",
+    "verdict": "Legitimate Job Posting",
+    "risk_percentage": 4.0,
+    "red_flag_count": 0,
+    "status_color": "success",
+    "id": 6,
+    "timestamp": "2026-10-09 22:26:30"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Urgent Data Entry",
+    "company": "Quick Cash LLC",
+    "verdict": "Fraudulent (Fake Job)",
+    "risk_percentage": 94.0,
+    "red_flag_count": 3,
+    "status_color": "danger",
+    "id": 5,
+    "timestamp": "2026-10-09 22:26:29"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Senior Python Backend Developer",
+    "company": "TechCorp Global",
+    "verdict": "Legitimate Job Posting",
+    "risk_percentage": 4.0,
+    "red_flag_count": 0,
+    "status_color": "success",
+    "id": 4,
+    "timestamp": "2026-10-09 22:25:31"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Urgent Data Entry",
+    "company": "Quick Cash LLC",
+    "verdict": "Fraudulent (Fake Job)",
+    "risk_percentage": 94.0,
+    "red_flag_count": 3,
+    "status_color": "danger",
+    "id": 3,
+    "timestamp": "2026-10-09 22:25:31"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Senior Python Backend Developer",
+    "company": "TechCorp Global",
+    "verdict": "Legitimate Job Posting",
+    "risk_percentage": 4.0,
+    "red_flag_count": 0,
+    "status_color": "success",
+    "id": 2,
+    "timestamp": "2026-10-09 22:24:55"
+  },
+  {
+    "scan_type": "job_description",
+    "title": "Urgent Data Entry",
+    "company": "Quick Cash LLC",
+    "verdict": "Fraudulent (Fake Job)",
+    "risk_percentage": 94.0,
+    "red_flag_count": 3,
+    "status_color": "danger",
+    "id": 1,
+    "timestamp": "2026-10-09 22:24:55"
+  }
+]

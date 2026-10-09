@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%" fill="none" role="img" aria-label="JobSafe AI Cybersecurity Shield and Document Verification Illustration">
+  <defs>
+    <!-- Purple Gradients -->
+    <linearGradient id="heroBgGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EDE9FE" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#DDD6FE" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="heroPurplePrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#5B21B6"/>
+    </linearGradient>
+    <linearGradient id="heroPurpleAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="heroShieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6D28D9"/>
+      <stop offset="50%" stop-color="#5B21B6"/>
+      <stop offset="100%" stop-color="#3B0764"/>
+    </linearGradient>
+    <linearGradient id="heroDocGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#F5F3FF"/>
+    </linearGradient>
+    <linearGradient id="heroGreenCheck" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="circuitLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8B5CF6" stop-opacity="0.2"/>
+      <stop offset="50%" stop-color="#A855F7" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#6D28D9" stop-opacity="0.2"/>
+    </linearGradient>
+    
+    <!-- Drop Shadow Filters -->
+    <filter id="softShadow" x="-10%" y="-10%" width="125%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#4C1D95" flood-opacity="0.14"/>
+    </filter>
+    <filter id="shieldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#8B5CF6" flood-opacity="0.35"/>
+    </filter>
+    <filter id="iconShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background Ambient Glow & Grid Nodes -->
+  <circle cx="260" cy="200" r="160" fill="url(#heroBgGlow)"/>
+  
+  <!-- AI Circuit Lines & Neural Interconnects -->
+  <g stroke="#C4B5FD" stroke-width="1.8" stroke-dasharray="4,4" opacity="0.75">
+    <path d="M 60 140 L 130 140 L 170 190"/>
+    <path d="M 90 280 L 150 280 L 190 230"/>
+    <path d="M 430 110 L 370 110 L 330 160"/>
+    <path d="M 440 260 L 380 260 L 340 220"/>
+    <path d="M 250 50 L 250 90"/>
+    <path d="M 250 320 L 250 360"/>
+  </g>
+
+  <!-- Circuit Connector Nodes -->
+  <g fill="#7C3AED">
+    <circle cx="60" cy="140" r="4.5"/>
+    <circle cx="130" cy="140" r="3.5"/>
+    <circle cx="90" cy="280" r="4.5"/>
+    <circle cx="430" cy="110" r="4.5"/>
+    <circle cx="370" cy="110" r="3.5"/>
+    <circle cx="440" cy="260" r="4.5"/>
+    <circle cx="250" cy="50" r="4"/>
+    <circle cx="250" cy="360" r="4"/>
+  </g>
+  <g fill="#A855F7" opacity="0.6">
+    <circle cx="60" cy="140" r="8" fill-opacity="0.25"/>
+    <circle cx="430" cy="110" r="8" fill-opacity="0.25"/>
+    <circle cx="90" cy="280" r="8" fill-opacity="0.25"/>
+    <circle cx="440" cy="260" r="8" fill-opacity="0.25"/>
+  </g>
+
+  <!-- Back Layer: Job/Employment Document Sheet -->
+  <g filter="url(#softShadow)" transform="rotate(-6 190 200)">
+    <!-- Document Card -->
+    <rect x="90" y="80" width="200" height="250" rx="16" fill="url(#heroDocGrad)" stroke="#E9D5FF" stroke-width="2"/>
+    <!-- Folded Corner / Header Accent -->
+    <path d="M 90 96 C 90 87 97 80 106 80 L 274 80 C 283 80 290 87 290 96 L 290 125 L 90 125 Z" fill="#F3E8FF"/>
+    
+    <!-- Mini Document Icon & Header Lines -->
+    <rect x="110" y="95" width="20" height="18" rx="4" fill="#8B5CF6"/>
+    <rect x="138" y="97" width="80" height="6" rx="3" fill="#6D28D9"/>
+    <rect x="138" y="108" width="50" height="5" rx="2.5" fill="#A78BFA"/>
+    
+    <!-- Document Body Content Lines -->
+    <rect x="110" y="145" width="160" height="7" rx="3.5" fill="#E2E8F0"/>
+    <rect x="110" y="162" width="145" height="7" rx="3.5" fill="#E2E8F0"/>
+    <rect x="110" y="179" width="160" height="7" rx="3.5" fill="#E2E8F0"/>
+    <rect x="110" y="196" width="120" height="7" rx="3.5" fill="#E2E8F0"/>
+    <rect x="110" y="213" width="155" height="7" rx="3.5" fill="#E2E8F0"/>
+    <rect x="110" y="230" width="90" height="7" rx="3.5" fill="#E2E8F0"/>
+
+    <!-- Document Safety Hologram Badge -->
+    <rect x="110" y="260" width="70" height="24" rx="12" fill="#EDE9FE" stroke="#C4B5FD" stroke-width="1.2"/>
+    <circle cx="122" cy="272" r="5" fill="#10B981"/>
+    <rect x="133" y="269" width="38" height="6" rx="3" fill="#6D28D9"/>
+  </g>
+
+  <!-- Front Layer: Central Cybersecurity Shield -->
+  <g filter="url(#shieldGlow)">
+    <!-- Outer Shield Rim -->
+    <path d="M 310 90 
+             L 395 125 
+             C 395 210, 355 285, 310 325 
+             C 265 285, 225 210, 225 125 
+             Z" 
+          fill="url(#heroShieldGrad)" stroke="#A855F7" stroke-width="3"/>
+
+    <!-- Inner Shield Inset Layer -->
+    <path d="M 310 106 
+             L 380 135 
+             C 380 205, 345 268, 310 304 
+             C 275 268, 240 205, 240 135 
+             Z" 
+          fill="url(#heroPurplePrimary)" opacity="0.9"/>
+
+    <!-- Inner Shield Geometric Facet Line -->
+    <path d="M 310 106 L 310 304 C 345 268, 380 205, 380 135 Z" fill="#000000" opacity="0.12"/>
+    
+    <!-- Shield Circuit Overlay Pattern -->
+    <g stroke="#DDD6FE" stroke-width="1.8" fill="none" opacity="0.45">
+      <path d="M 310 130 L 310 170"/>
+      <path d="M 280 155 L 310 170 L 340 155"/>
+      <circle cx="280" cy="155" r="3" fill="#DDD6FE"/>
+      <circle cx="340" cy="155" r="3" fill="#DDD6FE"/>
+    </g>
+
+    <!-- Large Green Checkmark (Verification Symbol) -->
+    <g filter="url(#iconShadow)">
+      <circle cx="310" cy="210" r="32" fill="url(#heroGreenCheck)"/>
+      <path d="M 298 210 L 306 218 L 324 199" 
+            stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    </g>
+  </g>
+
+  <!-- Floating Floating Verification Pill (Top Right) -->
+  <g filter="url(#softShadow)" transform="translate(320, 50)">
+    <rect width="135" height="38" rx="19" fill="#FFFFFF" stroke="#C4B5FD" stroke-width="1.5"/>
+    <circle cx="22" cy="19" r="9" fill="#10B981"/>
+    <path d="M 18 19 L 21 22 L 27 16" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="38" y="23" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#1F1633">AI VERIFIED</text>
+  </g>
+
+  <!-- Floating Lock Badge (Bottom Left) -->
+  <g filter="url(#softShadow)" transform="translate(130, 275)">
+    <rect width="44" height="44" rx="14" fill="#FFFFFF" stroke="#A855F7" stroke-width="1.5"/>
+    <!-- Lock Shackle -->
+    <path d="M 17 21 L 17 17 C 17 14, 27 14, 27 17 L 27 21" stroke="#6D28D9" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <!-- Lock Body -->
+    <rect x="14" y="21" width="16" height="13" rx="3" fill="url(#heroPurpleAccent)"/>
+    <circle cx="22" cy="27" r="1.8" fill="#FFFFFF"/>
+  </g>
+
+  <!-- Floating Neural Sparkles -->
+  <g fill="#A855F7">
+    <path d="M 110 50 Q 115 60 125 60 Q 115 60 110 70 Q 105 60 95 60 Q 105 60 110 50 Z" opacity="0.8"/>
+    <path d="M 420 310 Q 424 318 432 318 Q 424 318 420 326 Q 416 318 408 318 Q 416 318 420 310 Z" opacity="0.7"/>
+    <path d="M 230 40 Q 233 46 239 46 Q 233 46 230 52 Q 227 46 221 46 Q 227 46 230 40 Z" opacity="0.6"/>
+  </g>
+</svg>

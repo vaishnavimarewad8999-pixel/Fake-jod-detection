@@ -1,0 +1,468 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - JobSafe AI{% endblock %}
+
+{% block head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+
+    <!-- Welcome Section (Light Lavender Purple Banner) -->
+    <div class="saas-card p-4 p-md-5 mb-4 position-relative overflow-hidden" style="background: linear-gradient(135deg, #ffffff 0%, #faf5ff 50%, #f5f3ff 100%); border: 1.5px solid rgba(108, 43, 217, 0.15);">
+        <div class="row align-items-center justify-content-between g-4">
+            <div class="col-lg-7">
+                <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3 fs-8 fw-bold" style="background: var(--bg-lavender); color: var(--purple-primary); border: 1px solid rgba(108, 43, 217, 0.2);">
+                    <i class="fa-solid fa-shield-halved"></i> <span data-i18n="badge_scanner">NEURAL FRAUD DEFENSE &bull; v2.0</span>
+                </div>
+                <h1 class="display-6 fw-bold text-dark mb-2 tracking-tight">
+                    Welcome to <span class="brand-logo-text">JobSafe AI</span>
+                </h1>
+                <p class="text-secondary fs-6 mb-4 max-w-xl lh-base" style="max-width: 620px;" data-i18n="analyzer_subtitle">
+                    AI-powered protection against fraudulent job postings. Safeguard your career search with Natural Language Processing and supervised Random Forest classification.
+                </p>
+                <div class="hero-actions-container" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                    <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary px-4 py-2.5">
+                        <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        <span data-i18n="btn_analyze_job">Analyze Job</span>
+                    </a>
+                    <a href="{{ url_for('offer_letter') }}" class="btn btn-saas-primary px-4 py-2.5" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);">
+                        <i class="fa-solid fa-file-shield"></i>
+                        <span data-i18n="btn_verify_offer">Verify Offer Letter</span>
+                    </a>
+                    <a href="{{ url_for('analytics') }}" class="btn btn-saas-secondary px-3.5 py-2.5">
+                        <i class="fa-solid fa-chart-pie text-purple"></i>
+                        <span data-i18n="nav_analytics">Model Analytics</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-5 text-center text-lg-end d-none d-lg-block position-relative">
+                <img src="{{ url_for('static', filename='images/hero_ai_shield.svg') }}" 
+                     alt="AI shield, verified document, checkmark and neural circuit elements" 
+                     class="img-fluid" 
+                     style="max-height: 250px; filter: drop-shadow(0 12px 28px rgba(108, 43, 217, 0.16));">
+            </div>
+        </div>
+    </div>
+
+    <!-- Two-Pillar Fraud Defense Services -->
+    <div class="row g-3 mb-4">
+        <!-- Pillar 1: Fake Job Detection -->
+        <div class="col-md-6">
+            <div class="saas-card p-4 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 1.5px solid rgba(108, 43, 217, 0.18);">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 44px; height: 44px; background: var(--gradient-primary); font-size: 1.15rem;">
+                            <i class="fa-solid fa-magnifying-glass-chart"></i>
+                        </div>
+                        <div>
+                            <span class="badge mb-1" style="background: var(--bg-lavender); color: var(--purple-primary); font-size: 0.72rem;">CORE SCANNER</span>
+                            <h4 class="fw-bold text-dark mb-0">Fake Job Detection</h4>
+                        </div>
+                    </div>
+                    <p class="text-secondary small mb-3 lh-base">
+                        Paste any job posting or recruiter message to analyze fraud probability, identify predatory red flags, and verify employer authenticity with Random Forest and NLP.
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary w-100 py-2.5 fw-bold">
+                        <i class="fa-solid fa-magnifying-glass-chart me-1.5"></i> Analyze Job Posting
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pillar 2: Offer Letter Verification -->
+        <div class="col-md-6">
+            <div class="saas-card p-4 h-100 d-flex flex-column justify-content-between position-relative overflow-hidden" style="border: 1.5px solid rgba(108, 43, 217, 0.25); background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);">
+                <div>
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="rounded-3 d-flex align-items-center justify-content-center text-white shadow-sm" style="width: 44px; height: 44px; background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%); font-size: 1.15rem;">
+                            <i class="fa-solid fa-file-shield"></i>
+                        </div>
+                        <div>
+                            <span class="badge mb-1" style="background: #ede9fe; color: #5b21b6; font-size: 0.72rem;">NEW MAJOR FEATURE</span>
+                            <h4 class="fw-bold text-dark mb-0">🛡️ Offer Letter Verification</h4>
+                        </div>
+                    </div>
+                    <p class="text-secondary small mb-3 lh-base">
+                        Upload an offer letter and let JobSafe AI analyze it for suspicious patterns, advance fee scams, fake cashier checks, and unauthorized communication channels.
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ url_for('offer_letter') }}" class="btn btn-saas-primary w-100 py-2.5 fw-bold" style="background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);">
+                        <i class="fa-solid fa-file-circle-check me-1.5"></i> Verify Offer Letter
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4 Statistic Cards (Clean White with Gradient Accents) -->
+    <div class="row g-3 mb-4">
+        <!-- Total Jobs -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="saas-card p-3.5 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">Total Jobs Analyzed</span>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center text-white" style="width: 38px; height: 38px; background: var(--gradient-primary);">
+                        <i class="fa-solid fa-layer-group"></i>
+                    </div>
+                </div>
+                <div class="display-6 fw-bold text-dark font-monospace mb-1">{{ stats.total }}</div>
+                <small class="text-muted fs-8">Total verified audits in log</small>
+            </div>
+        </div>
+
+        <!-- Safe Jobs -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="saas-card p-3.5 h-100" style="border-color: var(--safe-green-border);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">Safe Jobs</span>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: var(--safe-green-bg); color: var(--safe-green);">
+                        <i class="fa-solid fa-circle-check fs-5"></i>
+                    </div>
+                </div>
+                <div class="display-6 fw-bold font-monospace mb-1" style="color: var(--safe-green);">{{ stats.safe }}</div>
+                <small class="text-muted fs-8">Authentic &bull; Low risk</small>
+            </div>
+        </div>
+
+        <!-- Suspicious Jobs -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="saas-card p-3.5 h-100" style="border-color: var(--warning-orange-border);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">Suspicious Jobs</span>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: var(--warning-orange-bg); color: var(--warning-orange);">
+                        <i class="fa-solid fa-triangle-exclamation fs-5"></i>
+                    </div>
+                </div>
+                <div class="display-6 fw-bold font-monospace mb-1" style="color: var(--warning-orange);">{{ stats.suspicious }}</div>
+                <small class="text-muted fs-8">Moderate risk &bull; verify details</small>
+            </div>
+        </div>
+
+        <!-- High Risk Jobs -->
+        <div class="col-sm-6 col-xl-3">
+            <div class="saas-card p-3.5 h-100" style="border-color: var(--danger-red-border);">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-bold text-uppercase">High Risk Jobs</span>
+                    <div class="rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; background: var(--danger-red-bg); color: var(--danger-red);">
+                        <i class="fa-solid fa-radiation fs-5"></i>
+                    </div>
+                </div>
+                <div class="display-6 fw-bold font-monospace mb-1" style="color: var(--danger-red);">{{ stats.high_risk }}</div>
+                <small class="text-muted fs-8">Scam indicators detected</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Risk Overview & Analytics Grid -->
+    <div class="row g-4 mb-4">
+        
+        <!-- Left: AI Risk Overview Section -->
+        <div class="col-lg-5">
+            <div class="saas-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-purple"></i> AI Risk Overview
+                        </h5>
+                        <small class="text-muted">Proportional breakdown of analyzed listings</small>
+                    </div>
+                    <span class="badge" style="background: var(--bg-lavender); color: var(--purple-primary); font-family: 'JetBrains Mono', monospace;">
+                        {{ stats.total }} Jobs
+                    </span>
+                </div>
+
+                <!-- Chart.js Doughnut -->
+                <div style="height: 220px; position: relative;">
+                    <canvas id="saasRiskOverviewChart"></canvas>
+                </div>
+
+                <!-- Breakdown Percentage Cards -->
+                <div class="row g-2 text-center mt-3 pt-2 border-top">
+                    <div class="col-4">
+                        <div class="p-2 rounded-3" style="background: var(--safe-green-bg);">
+                            <span class="fw-bold font-monospace d-block fs-6" style="color: var(--safe-green);">{{ stats.safe_pct }}%</span>
+                            <span class="text-muted fs-8 fw-semibold">Safe</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-2 rounded-3" style="background: var(--warning-orange-bg);">
+                            <span class="fw-bold font-monospace d-block fs-6" style="color: var(--warning-orange);">{{ stats.suspicious_pct }}%</span>
+                            <span class="text-muted fs-8 fw-semibold">Suspicious</span>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-2 rounded-3" style="background: var(--danger-red-bg);">
+                            <span class="fw-bold font-monospace d-block fs-6" style="color: var(--danger-red);">{{ stats.high_risk_pct }}%</span>
+                            <span class="text-muted fs-8 fw-semibold">High Risk</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Model Performance & Architecture Summary -->
+        <div class="col-lg-7">
+            <div class="saas-card p-4 h-100">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-brain text-purple"></i> Model Performance Summary
+                        </h5>
+                        <small class="text-muted">Empirical validation on 800 unseen test instances</small>
+                    </div>
+                    <span class="badge" style="background: var(--bg-lavender); color: var(--purple-primary);">
+                        Random Forest
+                    </span>
+                </div>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--bg-lavender);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">Accuracy</span>
+                            <span class="fw-bold font-monospace fs-4 text-purple">{{ metrics.models['Random Forest'].accuracy }}%</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--bg-lavender);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">Precision</span>
+                            <span class="fw-bold font-monospace fs-4 text-purple">{{ metrics.models['Random Forest'].precision }}%</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--bg-lavender);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">Recall</span>
+                            <span class="fw-bold font-monospace fs-4 text-purple">{{ metrics.models['Random Forest'].recall }}%</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3">
+                        <div class="p-3 rounded-3 text-center" style="background: var(--bg-lavender);">
+                            <span class="text-muted fs-8 fw-bold text-uppercase d-block mb-1">F1-Score</span>
+                            <span class="fw-bold font-monospace fs-4 text-purple">{{ metrics.models['Random Forest'].f1_score }}%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-3 rounded-3 border" style="background: #ffffff;">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="fw-bold text-dark small"><i class="fa-solid fa-microchip text-purple me-1.5"></i> Dual-Vector Detection Mechanism</span>
+                        <a href="{{ url_for('analytics') }}" class="text-purple small text-decoration-none fw-semibold fs-8">View Confusion Matrix &rarr;</a>
+                    </div>
+                    <p class="text-muted small mb-0 lh-sm">
+                        JobSafe AI combines high-dimensional TF-IDF Natural Language Processing (unigrams &amp; bigrams) with a deterministic 8-pattern heuristic engine to detect both learned phrasing and novel advance-fee variations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- How JobSafe AI Works (5-Stage Interactive Pipeline) -->
+    <div class="saas-card p-4 p-md-4.5 mb-4" id="dashboardPipelineSection" style="background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%); border: 1.5px solid rgba(108, 43, 217, 0.16);">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3 pb-2 border-bottom">
+            <div>
+                <span class="badge py-1 px-2.5 rounded-pill mb-1" style="background: var(--bg-lavender); color: var(--purple-primary); font-size: 0.72rem; font-weight: 700;">
+                    <i class="fa-solid fa-network-wired me-1"></i> INTERACTIVE PIPELINE
+                </span>
+                <h4 class="fw-bold text-dark mb-0">How JobSafe AI Works</h4>
+                <small class="text-secondary">Click any stage to test how our AI detects, pre-processes, scans, and classifies fraudulent jobs</small>
+            </div>
+            <button type="button" class="btn btn-saas-primary btn-sm px-3 fw-bold" onclick="openPipelineStep(1)">
+                <i class="fa-solid fa-play me-1"></i> Launch Studio Workbench
+            </button>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md">
+                <div class="pipeline-step-card saas-card p-3 h-100 cursor-pointer text-center" onclick="openPipelineStep(1)" title="Click to open Job Details form">
+                    <div class="rounded-3 d-inline-flex align-items-center justify-content-center text-white mb-2" style="width: 38px; height: 38px; background: var(--gradient-primary);">
+                        <i class="fa-solid fa-file-import"></i>
+                    </div>
+                    <span class="font-monospace text-purple fw-bold fs-8 d-block mb-1">01 &bull; INPUT</span>
+                    <h6 class="fw-bold text-dark mb-1 fs-7">Enter Job Details</h6>
+                    <small class="text-muted d-block fs-8 lh-sm mb-2">Structured form or raw description</small>
+                    <span class="badge bg-purple-subtle text-purple fs-8 py-1 px-2 w-100">Open Form &rarr;</span>
+                </div>
+            </div>
+
+            <div class="col-md">
+                <div class="pipeline-step-card saas-card p-3 h-100 cursor-pointer text-center" onclick="openPipelineStep(2)" title="Click to view Text Preprocessing">
+                    <div class="rounded-3 d-inline-flex align-items-center justify-content-center mb-2" style="width: 38px; height: 38px; background: var(--bg-lavender); color: var(--purple-primary);">
+                        <i class="fa-solid fa-filter"></i>
+                    </div>
+                    <span class="font-monospace text-purple fw-bold fs-8 d-block mb-1">02 &bull; NLP</span>
+                    <h6 class="fw-bold text-dark mb-1 fs-7">Text Preprocessing</h6>
+                    <small class="text-muted d-block fs-8 lh-sm mb-2">Regex sanitization &amp; normalization</small>
+                    <span class="badge bg-purple-subtle text-purple fs-8 py-1 px-2 w-100">View Cleaning &rarr;</span>
+                </div>
+            </div>
+
+            <div class="col-md">
+                <div class="pipeline-step-card saas-card p-3 h-100 cursor-pointer text-center" onclick="openPipelineStep(3)" title="Click to run AI/ML Analysis">
+                    <div class="rounded-3 d-inline-flex align-items-center justify-content-center text-white mb-2" style="width: 38px; height: 38px; background: var(--gradient-primary);">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <span class="font-monospace text-purple fw-bold fs-8 d-block mb-1">03 &bull; MODEL</span>
+                    <h6 class="fw-bold text-dark mb-1 fs-7">AI/ML Analysis</h6>
+                    <small class="text-muted d-block fs-8 lh-sm mb-2">Random Forest &amp; TF-IDF inference</small>
+                    <span class="badge bg-purple-subtle text-purple fs-8 py-1 px-2 w-100">Run Model &rarr;</span>
+                </div>
+            </div>
+
+            <div class="col-md">
+                <div class="pipeline-step-card saas-card p-3 h-100 cursor-pointer text-center" onclick="openPipelineStep(4)" title="Click to inspect Red Flags">
+                    <div class="rounded-3 d-inline-flex align-items-center justify-content-center mb-2" style="width: 38px; height: 38px; background: var(--warning-orange-bg); color: var(--warning-orange);">
+                        <i class="fa-solid fa-crosshairs"></i>
+                    </div>
+                    <span class="font-monospace text-warning fw-bold fs-8 d-block mb-1">04 &bull; HEURISTICS</span>
+                    <h6 class="fw-bold text-dark mb-1 fs-7">Red-Flag Detection</h6>
+                    <small class="text-muted d-block fs-8 lh-sm mb-2">Cashier check, Telegram &amp; fees</small>
+                    <span class="badge bg-warning-subtle text-warning fs-8 py-1 px-2 w-100">Scan Flags &rarr;</span>
+                </div>
+            </div>
+
+            <div class="col-md">
+                <div class="pipeline-step-card saas-card p-3 h-100 cursor-pointer text-center" onclick="openPipelineStep(5)" title="Click to view Risk Prediction">
+                    <div class="rounded-3 d-inline-flex align-items-center justify-content-center text-white mb-2" style="width: 38px; height: 38px; background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="font-monospace text-success fw-bold fs-8 d-block mb-1">05 &bull; VERDICT</span>
+                    <h6 class="fw-bold text-dark mb-1 fs-7">Risk Prediction</h6>
+                    <small class="text-muted d-block fs-8 lh-sm mb-2">0-100% Risk gauge &amp; Real/Fake verdict</small>
+                    <span class="badge bg-success-subtle text-success fs-8 py-1 px-2 w-100">View Prediction &rarr;</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Analyses Stream -->
+    <div class="row">
+        <div class="col-12">
+            <div class="saas-card p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <i class="fa-solid fa-clock-rotate-left text-purple"></i> Recent Analyses
+                        </h5>
+                        <small class="text-muted">Latest verified employment opportunities</small>
+                    </div>
+                    <a href="{{ url_for('history') }}" class="btn btn-saas-secondary btn-sm px-3 fs-8">
+                        View All Audits <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+
+                {% if recent_analyses %}
+                <div class="table-responsive">
+                    <table class="table table-saas w-100 mb-0">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Risk Score</th>
+                                <th>Classification</th>
+                                <th class="text-end">Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in recent_analyses %}
+                            <tr>
+                                <td>
+                                    <div class="fw-bold text-dark">{{ item.title }}</div>
+                                    {% if item.scan_type == 'offer_letter' %}
+                                    <span class="badge py-0.5 px-1.5 rounded-pill" style="background: #ede9fe; color: #6c2bd9; font-size: 0.7rem;"><i class="fa-solid fa-file-shield me-1"></i>Offer Letter</span>
+                                    {% else %}
+                                    <span class="badge py-0.5 px-1.5 rounded-pill" style="background: #f1f5f9; color: #475569; font-size: 0.7rem;"><i class="fa-solid fa-briefcase me-1"></i>Job Posting</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-secondary small">{{ item.company or 'Unspecified' }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2" style="min-width: 90px;">
+                                        <div class="progress flex-grow-1" style="height: 6px; background: #ede9fe;">
+                                            <div class="progress-bar bg-{{ item.status_color }}" style="width: {{ item.risk_percentage }}%"></div>
+                                        </div>
+                                        <span class="font-monospace fw-bold text-{{ item.status_color }} fs-8">{{ item.risk_percentage }}%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="status-pill-lg status-pill-{{ item.status_color }} py-1 px-2.5 fs-8">
+                                        {{ item.verdict }}
+                                    </span>
+                                </td>
+                                <td class="text-end font-monospace text-muted fs-8">
+                                    {{ item.timestamp }}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <div class="mb-2 text-purple opacity-50 fs-2">
+                        <i class="fa-solid fa-radar"></i>
+                    </div>
+                    <h6 class="text-dark fw-bold mb-1">No Recent Scans Recorded</h6>
+                    <p class="text-muted small mb-3">Begin by auditing a job listing with our AI classifier.</p>
+                    <a href="{{ url_for('analyzer') }}" class="btn btn-saas-primary btn-sm px-4">
+                        <i class="fa-solid fa-magnifying-glass-chart me-1"></i> Analyze First Job
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const ctx = document.getElementById("saasRiskOverviewChart");
+        if (ctx) {
+            const safeCount = {{ stats.safe }};
+            const suspCount = {{ stats.suspicious }};
+            const highCount = {{ stats.high_risk }};
+            const total = safeCount + suspCount + highCount;
+
+            new Chart(ctx.getContext("2d"), {
+                type: "doughnut",
+                data: {
+                    labels: ["Safe Jobs", "Suspicious Postings", "High Risk Fraud"],
+                    datasets: [{
+                        data: total > 0 ? [safeCount, suspCount, highCount] : [1, 0, 0],
+                        backgroundColor: total > 0 ? [
+                            "#10b981", // Safe green
+                            "#f59e0b", // Warning orange
+                            "#ef4444"  // Danger red
+                        ] : ["#ede9fe", "#ede9fe", "#ede9fe"],
+                        borderColor: ["#ffffff", "#ffffff", "#ffffff"],
+                        borderWidth: 3,
+                        hoverOffset: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: "70%",
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: "rgba(31, 22, 51, 0.9)",
+                            titleColor: "#ffffff",
+                            bodyColor: "#f8fafc",
+                            borderColor: "rgba(108, 43, 217, 0.3)",
+                            borderWidth: 1,
+                            padding: 10
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
